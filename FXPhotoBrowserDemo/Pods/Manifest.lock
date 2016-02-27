@@ -1,0 +1,10 @@
+PODS:
+  - DGActivityIndicatorView (2.0)
+
+DEPENDENCIES:
+  - DGActivityIndicatorView
+
+SPEC CHECKSUMS:
+  DGActivityIndicatorView: 52875b025a6ccf6a431a905285c12e2bb95eb559
+
+COCOAPODS: 0.38.2
