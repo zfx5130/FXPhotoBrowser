@@ -10,23 +10,30 @@
 #import "FXWaitingView.h"
 #import "UIImageView+WebCache.h"
 
-@interface FXPhotoBrowserView() <UIScrollViewDelegate>
+static const CGFloat kMinZoomScale = 0.6f;
+static const CGFloat kMaxZoomScale = 2.0f;
 
-@property (nonatomic,strong) FXWaitingView *waitingView;
-@property (nonatomic,strong) UITapGestureRecognizer *doubleTap;
-@property (nonatomic,strong) UITapGestureRecognizer *singleTap;
+@interface FXPhotoBrowserView()
+<UIScrollViewDelegate>
+
+@property (strong, nonatomic) FXWaitingView *waitingView;
+@property (strong, nonatomic) UITapGestureRecognizer *doubleTap;
+@property (strong, nonatomic) UITapGestureRecognizer *singleTap;
 @property (strong, nonatomic) UILongPressGestureRecognizer *longPressGesture;
-@property (nonatomic, strong) NSURL *imageUrl;
-@property (nonatomic, strong) UIImage *placeHolderImage;
-@property (nonatomic, strong) UIButton *reloadButton;
-@property (nonatomic, assign) BOOL hasLoadedImage;
+@property (strong, nonatomic) NSURL *imageUrl;
+@property (strong, nonatomic) UIImage *placeHolderImage;
+@property (strong, nonatomic) UIButton *reloadButton;
+@property (assign, nonatomic) BOOL hasLoadedImage;
+@property (strong, nonatomic) UIScrollView *scrollview;
+@property (strong, nonatomic) UIImageView *imageview;
 
 @end
 
 @implementation FXPhotoBrowserView
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
+#pragma mark - Lifecycle
+
+- (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.scrollview];
         [self addGestureRecognizer:self.doubleTap];
@@ -36,11 +43,32 @@
     return self;
 }
 
-- (UIScrollView *)scrollview
-{
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.waitingView.center = CGPointMake(self.bounds.size.width * 0.5f,
+                                          self.bounds.size.height * 0.5f);
+    self.scrollview.frame = self.bounds;
+    self.waitingView.center = self.scrollview.center;
+    [self adjustFrame];
+}
+
+
+#pragma mark - Setters
+
+- (void)setProgress:(CGFloat)progress {
+    _progress = progress;
+    _waitingView.progress = progress;
+}
+
+#pragma mark - Getters
+
+- (UIScrollView *)scrollview {
     if (!_scrollview) {
         _scrollview = [[UIScrollView alloc] init];
-        _scrollview.frame = CGRectMake(0, 0, kScreenWidth, KScreenHeight);
+        _scrollview.frame = CGRectMake(0,
+                                       0,
+                                       kScreenWidth,
+                                       KScreenHeight);
         [_scrollview addSubview:self.imageview];
         _scrollview.delegate = self;
         _scrollview.clipsToBounds = YES;
@@ -48,22 +76,24 @@
     return _scrollview;
 }
 
-- (UIImageView *)imageview
-{
+- (UIImageView *)imageview {
     if (!_imageview) {
         _imageview = [[UIImageView alloc] init];
-        _imageview.frame = CGRectMake(0, 0, kScreenWidth, KScreenHeight);
+        _imageview.frame = CGRectMake(0,
+                                      0,
+                                      kScreenWidth,
+                                      KScreenHeight);
         _imageview.userInteractionEnabled = YES;
     }
     return _imageview;
 }
 
-- (UITapGestureRecognizer *)doubleTap
-{
+- (UITapGestureRecognizer *)doubleTap {
     if (!_doubleTap) {
-        _doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+        _doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                             action:@selector(handleDoubleTap:)];
         _doubleTap.numberOfTapsRequired = 2;
-        _doubleTap.numberOfTouchesRequired  =1;
+        _doubleTap.numberOfTouchesRequired = 1;
     }
     return _doubleTap;
 }
@@ -73,14 +103,15 @@
         _longPressGesture =
         [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                       action:@selector(handleLongPressGesture:)];
+        _longPressGesture.minimumPressDuration = 1.0f;
     }
     return _longPressGesture;
 }
 
-- (UITapGestureRecognizer *)singleTap
-{
+- (UITapGestureRecognizer *)singleTap {
     if (!_singleTap) {
-        _singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+        _singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                             action:@selector(handleSingleTap:)];
         _singleTap.numberOfTapsRequired = 1;
         _singleTap.numberOfTouchesRequired = 1;
         _singleTap.delaysTouchesBegan = YES;
@@ -90,178 +121,130 @@
     return _singleTap;
 }
 
-#pragma mark 双击
-- (void)handleDoubleTap:(UITapGestureRecognizer *)recognizer
-{
+#pragma mark - Private
+
+- (void)adjustFrame {
+    CGRect frame = self.scrollview.frame;
+    if (self.imageview.image) {
+        CGSize imageSize = self.imageview.image.size;
+        CGRect imageFrame = CGRectMake(0.0f,
+                                       0.0f,
+                                       imageSize.width,
+                                       imageSize.height);
+        CGFloat ratio = frame.size.width / imageFrame.size.width;
+        imageFrame.size.height = imageFrame.size.height * ratio;
+        imageFrame.size.width = frame.size.width;
+        self.imageview.frame = imageFrame;
+        self.scrollview.contentSize = self.imageview.frame.size;
+        self.imageview.center = [self centerOfScrollViewContent:self.scrollview];
     
-    //图片加载完之后才能响应双击放大
-    if (!self.hasLoadedImage) {
-        return;
-    }
-    CGPoint touchPoint = [recognizer locationInView:self];
-    if (self.scrollview.zoomScale <= 1.0) {
-        
-        CGFloat scaleX = touchPoint.x + self.scrollview.contentOffset.x;//需要放大的图片的X点
-        CGFloat sacleY = touchPoint.y + self.scrollview.contentOffset.y;//需要放大的图片的Y点
-        [self.scrollview zoomToRect:CGRectMake(scaleX, sacleY, 10, 10) animated:YES];
-        
+        CGFloat maxScale = frame.size.height / imageFrame.size.height;
+        maxScale = frame.size.width / imageFrame.size.width > maxScale ? frame.size.width / imageFrame.size.width : maxScale;
+        maxScale = maxScale > kMaxZoomScale ? maxScale : kMaxZoomScale;
+        self.scrollview.minimumZoomScale = kMinZoomScale;
+        self.scrollview.maximumZoomScale = maxScale;
+        self.scrollview.zoomScale = 1.0f;
     } else {
-        [self.scrollview setZoomScale:1.0 animated:YES]; //还原
+        frame.origin = CGPointZero;
+        self.imageview.frame = frame;
+        self.scrollview.contentSize = self.imageview.frame.size;
     }
-    
+    self.scrollview.contentOffset = CGPointZero;
 }
 
-#pragma mark 单击
+- (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView {
+    CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width) ?
+    (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5f : 0.0f;
+    CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height) ?
+    (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5f : 0.0f;
+    CGPoint actualCenter = CGPointMake(scrollView.contentSize.width * 0.5f + offsetX,
+                                       scrollView.contentSize.height * 0.5f + offsetY);
+    return actualCenter;
+}
 
-- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer
-{
+#pragma mark - Handlers
+
+- (void)handleDoubleTap:(UITapGestureRecognizer *)recognizer {
+    if (self.doublePressBlock) {
+        self.doublePressBlock(recognizer);
+    }
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
     if (self.singleTapBlock) {
         self.singleTapBlock(recognizer);
     }
 }
 
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)longPressGesture {
-    if (self.longPressBlock) {
-        self.longPressBlock(longPressGesture);
+    if (longPressGesture.state == UIGestureRecognizerStateBegan) {
+        if (self.longPressBlock) {
+            self.longPressBlock(longPressGesture);
+        }
     }
 }
 
-- (void)setProgress:(CGFloat)progress
-{
-    _progress = progress;
-    _waitingView.progress = progress;
-}
+#pragma mark - Public
 
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder
-{
-    if (_reloadButton) {
-        [_reloadButton removeFromSuperview];
+- (void)setImageWithURL:(NSURL *)url
+       placeholderImage:(UIImage *)placeholder {
+    if (self.reloadButton) {
+        [self.reloadButton removeFromSuperview];
     }
-    _imageUrl = url;
-    _placeHolderImage = placeholder;
-    //添加进度指示器
+    self.imageUrl = url;
+    self.placeHolderImage = placeholder;
     FXWaitingView *waitingView = [[FXWaitingView alloc] init];
-    waitingView.mode = FXWaitingViewModeLoopDiagram;
     waitingView.center = CGPointMake(kScreenWidth * 0.5, KScreenHeight * 0.5);
     self.waitingView = waitingView;
     [self addSubview:waitingView];
-    
-    //FXWebImage加载图片
-    __weak __typeof(self)weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     [_imageview sd_setImageWithURL:url placeholderImage:placeholder options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-        __strong __typeof(weakSelf)strongSelf = weakSelf;
-        strongSelf.waitingView.progress = (CGFloat)receivedSize / expectedSize;
-        
+        weakSelf.waitingView.progress = (CGFloat)receivedSize / expectedSize;
+        NSLog(@"::progress:::1:%@", @((CGFloat)receivedSize / expectedSize));
     } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        __strong __typeof(weakSelf)strongSelf = weakSelf;
-        [_waitingView removeFromSuperview];
-        
+        [weakSelf.waitingView removeFromSuperview];
         if (error) {
-            //图片加载失败的处理，此处可以自定义各种操作（...）
-            
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            strongSelf.reloadButton = button;
+            weakSelf.reloadButton = button;
             button.layer.cornerRadius = 2;
             button.clipsToBounds = YES;
-            button.bounds = CGRectMake(0, 0, 200, 40);
-            button.center = CGPointMake(kScreenWidth * 0.5, KScreenHeight * 0.5);
-            button.titleLabel.font = [UIFont systemFontOfSize:14];
-            button.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
-            [button setTitle:@"原图加载失败，点击重新加载" forState:UIControlStateNormal];
-            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            [button addTarget:strongSelf action:@selector(reloadImage) forControlEvents:UIControlEventTouchUpInside];
-            
+            button.bounds = CGRectMake(0, 0, 200.0f, 40.0f);
+            button.center = CGPointMake(kScreenWidth * 0.5f,
+                                        KScreenHeight * 0.5f);
+            button.titleLabel.font = [UIFont systemFontOfSize:14.0f];
+            button.backgroundColor = [UIColor colorWithRed:0.1f
+                                                     green:0.1f
+                                                      blue:0.1f
+                                                     alpha:0.3f];
+            [button setTitle:@"原图加载失败，点击重新加载"
+                    forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor whiteColor]
+                         forState:UIControlStateNormal];
+            [button addTarget:weakSelf
+                       action:@selector(reloadImage)
+             forControlEvents:UIControlEventTouchUpInside];
             [self addSubview:button];
             return;
         }
-        strongSelf.hasLoadedImage = YES;//图片加载成功
+        weakSelf.hasLoadedImage = YES;
     }];
 }
 
-- (void)reloadImage
-{
-    [self setImageWithURL:_imageUrl placeholderImage:_placeHolderImage];
+#pragma mark - Handlers
+
+- (void)reloadImage {
+    [self setImageWithURL:_imageUrl
+         placeholderImage:_placeHolderImage];
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    _waitingView.center = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
-    _scrollview.frame = self.bounds;
-    _waitingView.center = _scrollview.center;
-    [self adjustFrame];
-}
+#pragma mark -UIScrollViewDelegate
 
-- (void)adjustFrame
-{
-    CGRect frame = self.scrollview.frame;
-    if (self.imageview.image) {
-        CGSize imageSize = self.imageview.image.size;//获得图片的size
-        CGRect imageFrame = CGRectMake(0, 0, imageSize.width, imageSize.height);
-        if (kIsFullWidthForLandScape) {//图片宽度始终==屏幕宽度(新浪微博就是这种效果)
-            CGFloat ratio = frame.size.width/imageFrame.size.width;
-            imageFrame.size.height = imageFrame.size.height*ratio;
-            imageFrame.size.width = frame.size.width;
-        } else{
-            if (frame.size.width<=frame.size.height) {
-                //竖屏时候
-                CGFloat ratio = frame.size.width/imageFrame.size.width;
-                imageFrame.size.height = imageFrame.size.height*ratio;
-                imageFrame.size.width = frame.size.width;
-            }else{ //横屏的时候
-                CGFloat ratio = frame.size.height/imageFrame.size.height;
-                imageFrame.size.width = imageFrame.size.width*ratio;
-                imageFrame.size.height = frame.size.height;
-            }
-        }
-        
-        self.imageview.frame = imageFrame;
-//        NSLog(@"%@",NSStringFromCGRect(_scrollview.frame));
-//        NSLog(@"%@",NSStringFromCGRect(self.imageview.frame));
-//        self.scrollview.frame = self.imageview.frame;
-        self.scrollview.contentSize = self.imageview.frame.size;
-        self.imageview.center = [self centerOfScrollViewContent:self.scrollview];
-        
-        //根据图片大小找到最大缩放等级，保证最大缩放时候，不会有黑边
-        CGFloat maxScale = frame.size.height/imageFrame.size.height;
-        maxScale = frame.size.width/imageFrame.size.width>maxScale?frame.size.width/imageFrame.size.width:maxScale;
-        //超过了设置的最大的才算数
-        maxScale = maxScale>kMaxZoomScale?maxScale:kMaxZoomScale;
-        //初始化
-        self.scrollview.minimumZoomScale = kMinZoomScale;
-        self.scrollview.maximumZoomScale = maxScale;
-        self.scrollview.zoomScale = 1.0f;
-    }else{
-        frame.origin = CGPointZero;
-        self.imageview.frame = frame;
-        //重置内容大小
-        self.scrollview.contentSize = self.imageview.frame.size;
-    }
-    self.scrollview.contentOffset = CGPointZero;
-
-}
-
-- (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
-{
-    CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
-    (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
-    CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
-    (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
-    CGPoint actualCenter = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
-                                       scrollView.contentSize.height * 0.5 + offsetY);
-    return actualCenter;
-}
-
-#pragma mark UIScrollViewDelegate
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
-{
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self.imageview;
 }
 
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView //这里是缩放进行时调整
-{
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     self.imageview.center = [self centerOfScrollViewContent:scrollView];
-
 }
 
 @end

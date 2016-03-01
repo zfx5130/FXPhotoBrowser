@@ -27,6 +27,12 @@ UITableViewDelegate>
     [super viewDidLoad];
     [self setupViews];
     self.tableView.tableFooterView = [[UIView alloc] init];
+    
+    /**
+     *
+     * 1.目前状态,
+     *
+     */
 }
 
 
@@ -38,8 +44,6 @@ UITableViewDelegate>
 
 - (void)setupViews {
     self.title = @"图片浏览";
-    
-    //测试数据
     _srcStringArray = @[
                         @"http://ww2.sinaimg.cn/thumbnail/9ecab84ejw1emgd5nd6eaj20c80c8q4a.jpg",
                         @"http://ww2.sinaimg.cn/thumbnail/642beb18gw1ep3629gfm0g206o050b2a.gif",

@@ -11,6 +11,6 @@
 
 @interface FXPhotoGroup : UIView 
 
-@property (nonatomic, strong) NSArray *photoItemArray;
+@property (strong, nonatomic) NSArray *photoItemArray;
 
 @end

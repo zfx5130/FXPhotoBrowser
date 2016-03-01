@@ -9,16 +9,54 @@
 #import <UIKit/UIKit.h>
 
 @interface FXPhotoBrowserView : UIView
-@property (nonatomic,strong) UIScrollView *scrollview;
-@property (nonatomic,strong) UIImageView *imageview;
-@property (nonatomic, assign) CGFloat progress;
 
-@property (nonatomic, assign) BOOL beginLoadingImage;
+/**
+ *  the scrollView
+ */
+@property (strong, nonatomic, readonly) UIScrollView *scrollview;
 
-@property (nonatomic, strong) void (^singleTapBlock)(UITapGestureRecognizer *recognizer);
+/**
+ *  imageview
+ */
+@property (strong, nonatomic, readonly) UIImageView *imageview;
 
+/**
+ *  the image load progress
+ */
+@property (assign, nonatomic) CGFloat progress;
+
+/**
+ *  begin loading image
+ */
+@property (assign, nonatomic) BOOL beginLoadingImage;
+
+/**
+ *  has loading Image
+ */
+@property (assign, nonatomic, readonly) BOOL hasLoadedImage;
+
+/**
+ *  single tap block
+ */
+@property (strong, nonatomic) void (^singleTapBlock)(UITapGestureRecognizer *recognizer);
+
+/**
+ *  long press block
+ */
 @property (strong, nonatomic) void (^longPressBlock)(UILongPressGestureRecognizer *recognizer);
 
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder;
+/**
+ *  double press block
+ */
+@property (strong, nonatomic) void (^doublePressBlock)(UITapGestureRecognizer *recognizer);
+
+/**
+ *  set image with url
+ *
+ *  @param url         url
+ *  @param placeholder placeholder
+ */
+- (void)setImageWithURL:(NSURL *)url
+       placeholderImage:(UIImage *)placeholder;
 
 @end

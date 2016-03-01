@@ -11,7 +11,6 @@
 
 @interface FXWaitingView : UIView
 
-@property (nonatomic, assign) CGFloat progress;
-@property (nonatomic, assign) int mode;
+@property (assign, nonatomic) CGFloat progress;
 
 @end

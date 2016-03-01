@@ -11,91 +11,82 @@
 #import "UIButton+WebCache.h"
 #import "FXPhotoBrowser.h"
 
-#define FXPhotoGroupImageMargin 15
+static const CGFloat kDefaultImageMargin = 10.0f;
 
-@interface FXPhotoGroup () <FXPhotoBrowserDelegate>
+@interface FXPhotoGroup ()
+<FXPhotoBrowserDelegate>
 
 @end
 
 @implementation FXPhotoGroup 
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        // 清除图片缓存，便于测试
         [[SDWebImageManager sharedManager].imageCache clearDisk];
     }
     return self;
 }
 
-
-- (void)setPhotoItemArray:(NSArray *)photoItemArray
-{
+- (void)setPhotoItemArray:(NSArray *)photoItemArray {
     _photoItemArray = photoItemArray;
     [photoItemArray enumerateObjectsUsingBlock:^(FXPhotoItem *obj, NSUInteger idx, BOOL *stop) {
         UIButton *btn = [[UIButton alloc] init];
-        
-        //让图片不变形，以适应按钮宽高，按钮中图片部分内容可能看不到
         btn.imageView.contentMode = UIViewContentModeScaleAspectFill;
         btn.clipsToBounds = YES;
-        
-        [btn sd_setImageWithURL:[NSURL URLWithString:obj.thumbnail_pic] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"whiteplaceholder"]];
+        [btn sd_setImageWithURL:[NSURL URLWithString:obj.thumbnail_pic]
+                       forState:UIControlStateNormal
+               placeholderImage:[UIImage imageNamed:@"whiteplaceholder"]];
         btn.tag = idx;
-        
-        [btn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [btn addTarget:self
+                action:@selector(buttonClick:)
+      forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
     }];
 }
 
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [super layoutSubviews];
     long imageCount = self.photoItemArray.count;
     int perRowImageCount = ((imageCount == 4) ? 2 : 3);
     CGFloat perRowImageCountF = (CGFloat)perRowImageCount;
-    int totalRowCount = ceil(imageCount / perRowImageCountF); // ((imageCount + perRowImageCount - 1) / perRowImageCount)
-    CGFloat w = 80;
-    CGFloat h = 80;
-    
+    int totalRowCount = ceil(imageCount / perRowImageCountF);
+    CGFloat width = 80.0f;
+    CGFloat height = 80.0f;
     [self.subviews enumerateObjectsUsingBlock:^(UIButton *btn, NSUInteger idx, BOOL *stop) {
-        
         long rowIndex = idx / perRowImageCount;
         int columnIndex = idx % perRowImageCount;
-        CGFloat x = columnIndex * (w + FXPhotoGroupImageMargin);
-        CGFloat y = rowIndex * (h + FXPhotoGroupImageMargin);
-        btn.frame = CGRectMake(x, y, w, h);
+        CGFloat x = columnIndex * (width + kDefaultImageMargin);
+        CGFloat y = rowIndex * (height + kDefaultImageMargin);
+        btn.frame = CGRectMake(x, y, width, height);
     }];
-
-    self.frame = CGRectMake(10, 10, 280, totalRowCount * (FXPhotoGroupImageMargin + h));
+    self.frame = CGRectMake(10.0f,
+                            10.0f,
+                            280.0f,
+                            totalRowCount * (kDefaultImageMargin + height));
 }
 
-- (void)buttonClick:(UIButton *)button
-{
-    NSLog(@"++++++++))))))buttonClick))))))))");
-    //启动图片浏览器
+- (void)buttonClick:(UIButton *)button {
     FXPhotoBrowser *browser = [[FXPhotoBrowser alloc] init];
-    browser.sourceImagesContainerView = self; // 原图的父控件
-    browser.imageCount = self.photoItemArray.count; // 图片总数
+    browser.sourceImagesContainerView = self;
+    browser.imageCount = self.photoItemArray.count;
     browser.currentImageIndex = (int)button.tag;
     browser.delegate = self;
     [browser show];
-    
 }
 
-#pragma mark - photobrowser代理方法
+#pragma mark - FXPhotoBrowserDelegate
 
-// 返回临时占位图片（即原来的小图）
-- (UIImage *)photoBrowser:(FXPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index
-{
+- (UIImage *)photoBrowser:(FXPhotoBrowser *)browser
+ placeholderImageForIndex:(NSInteger)index {
     return [self.subviews[index] currentImage];
 }
 
-
-// 返回高质量图片的url
-- (NSURL *)photoBrowser:(FXPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index
-{
-    NSString *urlStr = [[self.photoItemArray[index] thumbnail_pic] stringByReplacingOccurrencesOfString:@"thumbnail" withString:@"bmiddle"];
+- (NSURL *)photoBrowser:(FXPhotoBrowser *)browser
+highQualityImageURLForIndex:(NSInteger)index {
+    NSString *urlStr =
+    [[self.photoItemArray[index] thumbnail_pic] stringByReplacingOccurrencesOfString:@"thumbnail"
+                                                                          withString:@"bmiddle"];
     return [NSURL URLWithString:urlStr];
 }
 

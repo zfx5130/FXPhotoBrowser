@@ -11,6 +11,6 @@
 
 @interface FXPhotoItem : NSObject
 
-@property (nonatomic, copy) NSString *thumbnail_pic;
+@property (copy, nonatomic) NSString *thumbnail_pic;
 
 @end

@@ -7,22 +7,26 @@
 //
 
 #import "FXWaitingView.h"
+
+static const CGFloat kDefaultWaitingViewItemMargin = 5.0f;
+
 @implementation FXWaitingView
 
+#pragma mark - Lifecycle
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = FXWaitingViewBackgroundColor;
+        self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = YES;
-        self.mode = FXWaitingViewModeLoopDiagram;
     }
     return self;
 }
 
-- (void)setProgress:(CGFloat)progress
-{
+#pragma mark - Setters
+
+- (void)setProgress:(CGFloat)progress {
+    NSLog(@":::进度:::3333:::%@",@(progress));
     _progress = progress;
     [self setNeedsDisplay];
     if (progress >= 1) {
@@ -30,58 +34,37 @@
     }
 }
 
-- (void)setFrame:(CGRect)frame
-{
-    //设置背景图为圆
-    frame.size.width = 50;
-    frame.size.height = 50;
-    self.layer.cornerRadius = 25;
+- (void)setFrame:(CGRect)frame {
+    frame.size.width = 40.0f;
+    frame.size.height = 40.0f;
+    self.layer.cornerRadius = 20.0f;
     [super setFrame:frame];
 }
 
-- (void)drawRect:(CGRect)rect
-{
+- (void)drawRect:(CGRect)rect {
+    
+    CGFloat xCenter = rect.size.width * 0.5f;
+    CGFloat yCenter = rect.size.height * 0.5f;
+    CGFloat to = - M_PI * 0.5f + self.progress * M_PI * 2 + 0.05f;
+    CGFloat radius = MIN(rect.size.width, rect.size.height) * 0.5f - kDefaultWaitingViewItemMargin;
+    
     CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextBeginPath(ctx);
+    CGContextSetRGBStrokeColor(ctx, 0.0f, 0.0f, 0.0f, 0.7f);
+    CGContextSetLineWidth(ctx, 4);
+    CGContextSetLineCap(ctx, kCGLineCapRound);
+    CGContextAddArc(ctx, xCenter, yCenter, radius, - M_PI * 0.5f, 1.5f * M_PI + 0.05f, 0.0f);
+    CGContextStrokePath(ctx);
     
-    CGFloat xCenter = rect.size.width * 0.5;
-    CGFloat yCenter = rect.size.height * 0.5;
-    [[UIColor whiteColor] set];
+    CGContextBeginPath(ctx);
+    CGContextSetRGBStrokeColor(ctx, 1.0f, 1.0f, 1.0f, 1.0f);
+    CGContextSetLineWidth(ctx, 4);
+    CGContextSetLineCap(ctx, kCGLineCapRound);
+    CGContextAddArc(ctx, xCenter, yCenter, radius, - M_PI * 0.5f, to, 0);
+    CGContextStrokePath(ctx);
     
-    switch (self.mode) {
-        case FXWaitingViewModePieDiagram:
-            {
-                CGFloat radius = MIN(rect.size.width * 0.5, rect.size.height * 0.5) - FXWaitingViewItemMargin;
-                
-                
-                CGFloat w = radius * 2 + FXWaitingViewItemMargin;
-                CGFloat h = w;
-                CGFloat x = (rect.size.width - w) * 0.5;
-                CGFloat y = (rect.size.height - h) * 0.5;
-                CGContextAddEllipseInRect(ctx, CGRectMake(x, y, w, h));
-                CGContextFillPath(ctx);
-                
-                [FXWaitingViewBackgroundColor set];
-                CGContextMoveToPoint(ctx, xCenter, yCenter);
-                CGContextAddLineToPoint(ctx, xCenter, 0);
-                CGFloat to = - M_PI * 0.5 + self.progress * M_PI * 2 + 0.001; // 初始值
-                CGContextAddArc(ctx, xCenter, yCenter, radius, - M_PI * 0.5, to, 1);
-                CGContextClosePath(ctx);
-                
-                CGContextFillPath(ctx);
-            }
-            break;
-            
-        default:
-            {
-                CGContextSetLineWidth(ctx, 4);
-                CGContextSetLineCap(ctx, kCGLineCapRound);
-                CGFloat to = - M_PI * 0.5 + self.progress * M_PI * 2 + 0.05; // 初始值0.05
-                CGFloat radius = MIN(rect.size.width, rect.size.height) * 0.5 - FXWaitingViewItemMargin;
-                CGContextAddArc(ctx, xCenter, yCenter, radius, - M_PI * 0.5, to, 0);
-                CGContextStrokePath(ctx);
-            }
-            break;
-    }
+    
+    
 }
 
 @end

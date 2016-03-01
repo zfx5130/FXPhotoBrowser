@@ -21,7 +21,8 @@ static const CGFloat kDefaultImageViewPadding = 10.0f;
 static const CGFloat kDefaultShowImageAnimationDuration = 0.35f;
 
 @interface FXPhotoBrowser ()
-<UIScrollViewDelegate>
+<UIScrollViewDelegate,
+UIAlertViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (assign, nonatomic) BOOL hasShowedFistView;
@@ -95,22 +96,17 @@ static const CGFloat kDefaultShowImageAnimationDuration = 0.35f;
         view.imageview.tag = i;
         __weak typeof(self) weakSelf = self;
         view.singleTapBlock = ^(UITapGestureRecognizer *recognizer){
-            [weakSelf photoClick:recognizer];
+            [weakSelf handleSingleTap:recognizer];
         };
         view.longPressBlock = ^(UILongPressGestureRecognizer *recognizer) {
-            [weakSelf saveImage:recognizer];
+            [weakSelf handleLongPress:recognizer];
+        };
+        view.doublePressBlock = ^(UITapGestureRecognizer *recognizer) {
+            [weakSelf handleDoubleTap:recognizer];
         };
         [self.scrollView addSubview:view];
     }
     [self setupImageOfImageViewForIndex:self.currentImageIndex];
-}
-
-- (void)saveImage:(UILongPressGestureRecognizer *)recognizer {
-    FXPhotoBrowserView *currentView = self.scrollView.subviews[self.currentImageIndex];
-    UIImageWriteToSavedPhotosAlbum(currentView.imageview.image,
-                                   self,
-                                   @selector(image:didFinishSavingWithError:contextInfo:),
-                                   NULL);
 }
 
 - (void)setupImageOfImageViewForIndex:(NSInteger)index {
@@ -153,43 +149,42 @@ static const CGFloat kDefaultShowImageAnimationDuration = 0.35f;
     tempView.image = [self placeholderImageForIndex:self.currentImageIndex];
     [self addSubview:tempView];
     tempView.contentMode = UIViewContentModeScaleAspectFit;
-    
-    NSLog(@"::::::::frame:::::%@", NSStringFromCGRect(tempView.frame));
     CGFloat placeImageSizeWidth = tempView.image.size.width;
     CGFloat placeImageSizeHeight = tempView.image.size.height;
-    CGRect targetTemp;
-
-    CGFloat placeHolderH = (placeImageSizeHeight * kScreenWidth) / placeImageSizeWidth;
-    if (placeHolderH <= KScreenHeight) {
-        targetTemp = CGRectMake(0, (KScreenHeight - placeHolderH) * 0.5 , kScreenWidth, placeHolderH);
-    } else {//图片高度>屏幕高度
-        targetTemp = CGRectMake(0, 0, kScreenWidth, placeHolderH);
-    }
     
-    //先隐藏scrollview
-    _scrollView.hidden = YES;
-
+    NSLog(@":::::w::%@:::h::%@",@(placeImageSizeWidth), @(placeImageSizeHeight));
+    
+    CGFloat placeHolderH = (placeImageSizeHeight * kScreenWidth) / placeImageSizeWidth;
+    CGRect targetTemp;
+    if (placeHolderH <= KScreenHeight) {
+        targetTemp = CGRectMake(0,
+                                (KScreenHeight - placeHolderH) * 0.5,
+                                kScreenWidth,
+                                placeHolderH);
+    } else {
+        targetTemp = CGRectMake(0,
+                                0,
+                                kScreenWidth,
+                                placeHolderH);
+    }
+    self.scrollView.hidden = YES;
     [UIView animateWithDuration:kDefaultShowImageAnimationDuration animations:^{
-        //将点击的临时imageview动画放大到和目标imageview一样大
         tempView.frame = targetTemp;
     } completion:^(BOOL finished) {
-        //动画完成后，删除临时imageview，让目标imageview显示
-        _hasShowedFistView = YES;
+        self.hasShowedFistView = YES;
         [tempView removeFromSuperview];
-        _scrollView.hidden = NO;
+        self.scrollView.hidden = NO;
     }];
 }
 
-- (UIImage *)placeholderImageForIndex:(NSInteger)index
-{
+- (UIImage *)placeholderImageForIndex:(NSInteger)index {
     if ([self.delegate respondsToSelector:@selector(photoBrowser:placeholderImageForIndex:)]) {
         return [self.delegate photoBrowser:self placeholderImageForIndex:index];
     }
     return nil;
 }
 
-- (NSURL *)highQualityImageURLForIndex:(NSInteger)index
-{
+- (NSURL *)highQualityImageURLForIndex:(NSInteger)index {
     if ([self.delegate respondsToSelector:@selector(photoBrowser:highQualityImageURLForIndex:)]) {
         return [self.delegate photoBrowser:self highQualityImageURLForIndex:index];
     }
@@ -205,107 +200,41 @@ static const CGFloat kDefaultShowImageAnimationDuration = 0.35f;
     [alertView show];
 }
 
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex && alertView.tag == 100) {
+        FXPhotoBrowserView *currentView = self.scrollView.subviews[self.currentImageIndex];
+        UIImageWriteToSavedPhotosAlbum(currentView.imageview.image,
+                                       self,
+                                       @selector(image:didFinishSavingWithError:contextInfo:),
+                                       NULL);
+    }
+}
+
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    int index = (scrollView.contentOffset.x + _scrollView.bounds.size.width * 0.5) / _scrollView.bounds.size.width;
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSInteger index = (scrollView.contentOffset.x + self.scrollView.bounds.size.width * 0.5) / self.scrollView.bounds.size.width;
     self.pageControl.currentPage = index;
-    
-    long left = index - 1;
-    long right = index + 1;
-    left = left>0?left : 0;
-    right = right>self.imageCount?self.imageCount:right;
-    
-    for (long i = left; i < right; i++) {
-         [self setupImageOfImageViewForIndex:i];
+    NSInteger left = index - 1;
+    NSInteger right = index + 1;
+    left = left > 0 ? left : 0;
+    right = right > self.imageCount ? self.imageCount : right;
+    for (NSInteger i = left; i < right; i++) {
+        [self setupImageOfImageViewForIndex:i];
     }
-    
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    int autualIndex = scrollView.contentOffset.x  / _scrollView.bounds.size.width;
-    //设置当前下标
-    self.currentImageIndex = autualIndex;
-    //将不是当前imageview的缩放全部还原 (这个方法有些冗余，后期可以改进)
-    for (FXPhotoBrowserView *view in _scrollView.subviews) {
-        if (view.imageview.tag != autualIndex) {
-                view.scrollview.zoomScale = 1.0;
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    int index = scrollView.contentOffset.x / self.scrollView.bounds.size.width;
+    self.currentImageIndex = index;
+    for (FXPhotoBrowserView *view in self.scrollView.subviews) {
+        if (view.imageview.tag != index) {
+            view.scrollview.zoomScale = 1.0;
         }
     }
-}
-
-#pragma mark - tap
-
-- (void)handleDoubleTap:(UITapGestureRecognizer *)recognizer
-{
-    FXPhotoBrowserView *view = (FXPhotoBrowserView *)recognizer.view;
-    CGPoint touchPoint = [recognizer locationInView:self];
-    if (view.scrollview.zoomScale <= 1.0) {
-    
-    CGFloat scaleX = touchPoint.x + view.scrollview.contentOffset.x;//需要放大的图片的X点
-    CGFloat sacleY = touchPoint.y + view.scrollview.contentOffset.y;//需要放大的图片的Y点
-    [view.scrollview zoomToRect:CGRectMake(scaleX, sacleY, 10, 10) animated:YES];
-        
-    } else {
-        [view.scrollview setZoomScale:1.0 animated:YES]; //还原
-    }
-    
-}
-
-#pragma mark 单击
-- (void)photoClick:(UITapGestureRecognizer *)recognizer
-{
-    FXPhotoBrowserView *currentView = _scrollView.subviews[self.currentImageIndex];
-    [currentView.scrollview setZoomScale:1.0 animated:YES];//还原
-    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
-    CGRect screenBounds = [UIScreen mainScreen].bounds;
-    if (UIDeviceOrientationIsLandscape(orientation)) {
-        [UIView animateWithDuration:0.3f delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-            [[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientation)UIDeviceOrientationPortrait];
-            self.transform = CGAffineTransformIdentity;
-            self.bounds = CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height);
-            [self setNeedsLayout];
-            [self layoutIfNeeded];
-        } completion:^(BOOL finished) {
-            [self hidePhotoBrowser:recognizer];
-        }];
-    } else {
-        [self hidePhotoBrowser:recognizer];
-    }
-}
-
-- (void)hidePhotoBrowser:(UITapGestureRecognizer *)recognizer
-{
-    FXPhotoBrowserView *view = (FXPhotoBrowserView *)recognizer.view;
-    UIImageView *currentImageView = view.imageview;
-    NSUInteger currentIndex = currentImageView.tag;
-    UIView *sourceView = self.sourceImagesContainerView.subviews[currentIndex];
-    CGRect targetTemp = [self.sourceImagesContainerView convertRect:sourceView.frame toView:self];
-    UIImageView *tempImageView = [[UIImageView alloc] init];
-    tempImageView.image = currentImageView.image;
-    CGFloat tempImageSizeH = tempImageView.image.size.height;
-    CGFloat tempImageSizeW = tempImageView.image.size.width;
-    CGFloat tempImageViewH = (tempImageSizeH * kScreenWidth)/tempImageSizeW;
-    
-    if (tempImageViewH < KScreenHeight) {//图片高度<屏幕高度
-        tempImageView.frame = CGRectMake(0, (KScreenHeight - tempImageViewH)*0.5, kScreenWidth, tempImageViewH);
-    } else {
-        tempImageView.frame = CGRectMake(0, 0, kScreenWidth, tempImageViewH);
-    }
-    [self addSubview:tempImageView];
-    
-    _scrollView.hidden = YES;
-    self.backgroundColor = [UIColor clearColor];
-    _contentView.backgroundColor = [UIColor clearColor];
-    self.window.windowLevel = UIWindowLevelNormal;//显示状态栏
-    [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-        tempImageView.frame = targetTemp;
-    } completion:^(BOOL finished) {
-        [_contentView removeFromSuperview];
-        [tempImageView removeFromSuperview];
-    }];
 }
 
 #pragma mark - Handlers
@@ -318,6 +247,82 @@ didFinishSavingWithError:(NSError *)error
     } else {
         [self showAlertMessageWithTitle:NSLocalizedString(@"保存成功", @"保存成功的提示")];
     }
+}
+
+- (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer {
+    UIAlertView *alertView =
+    [[UIAlertView alloc] initWithTitle:@"是否保存图片到相册"
+                               message:nil
+                              delegate:self
+                     cancelButtonTitle:@"否"
+                     otherButtonTitles:@"是", nil];
+    alertView.tag = 100;
+    [alertView show];
+}
+
+- (void)handleDoubleTap:(UITapGestureRecognizer *)recognizer {
+    FXPhotoBrowserView *view = (FXPhotoBrowserView *)recognizer.view;
+    if (!view.hasLoadedImage) {
+        return;
+    }
+    CGPoint touchPoint = [recognizer locationInView:self];
+    if (view.scrollview.zoomScale <= 1.0) {
+        
+        CGFloat scaleX = touchPoint.x + view.scrollview.contentOffset.x;//需要放大的图片的X点
+        CGFloat sacleY = touchPoint.y + view.scrollview.contentOffset.y;//需要放大的图片的Y点
+        [view.scrollview zoomToRect:CGRectMake(scaleX, sacleY, 10, 10) animated:YES];
+        
+    } else {
+        [view.scrollview setZoomScale:1.0 animated:YES]; //还原
+    }
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    FXPhotoBrowserView *currentView = self.scrollView.subviews[self.currentImageIndex];
+    [currentView.scrollview setZoomScale:1.0
+                                animated:YES];
+    [self hidePhotoBrowser:recognizer];
+}
+
+- (void)hidePhotoBrowser:(UITapGestureRecognizer *)recognizer {
+    NSLog(@"::sinple::hidden:::view:");
+    FXPhotoBrowserView *view = (FXPhotoBrowserView *)recognizer.view;
+    UIImageView *currentImageView = view.imageview;
+    NSUInteger currentIndex = currentImageView.tag;
+    UIView *sourceView = self.sourceImagesContainerView.subviews[currentIndex];
+    CGRect targetTemp = [self.sourceImagesContainerView convertRect:sourceView.frame
+                                                             toView:self];
+    UIImageView *tempImageView = [[UIImageView alloc] init];
+    tempImageView.image = currentImageView.image;
+    CGFloat tempImageSizeHeight = tempImageView.image.size.height;
+    CGFloat tempImageSizeWidth = tempImageView.image.size.width;
+    CGFloat tempImageViewHeight = (tempImageSizeHeight * kScreenWidth) / tempImageSizeWidth;
+    
+    CGRect frame;
+    if (tempImageViewHeight < KScreenHeight) {
+        frame = CGRectMake(0,
+                           (KScreenHeight - tempImageViewHeight) * 0.5f,
+                           kScreenWidth,
+                           tempImageViewHeight);
+    } else {
+        frame = CGRectMake(0,
+                           0,
+                           kScreenWidth,
+                           tempImageViewHeight);
+    }
+    tempImageView.frame = frame;
+    [self addSubview:tempImageView];
+    self.scrollView.hidden = YES;
+    self.backgroundColor = [UIColor clearColor];
+    self.contentView.backgroundColor = [UIColor clearColor];
+    self.window.windowLevel = UIWindowLevelNormal;
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+        tempImageView.frame = targetTemp;
+    } completion:^(BOOL finished) {
+        [weakSelf.contentView removeFromSuperview];
+        [tempImageView removeFromSuperview];
+    }];
 }
 
 @end
