@@ -8,8 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		3A47E3DB84FBB08D4E93A113 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8149018B9E7FF35EFC206BD /* libPods.a */; };
-		D749C79A1C7FF7AB008BA347 /* FXTransitionAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = D749C7991C7FF7AB008BA347 /* FXTransitionAnimation.m */; };
-		D749C79D1C8004BA008BA347 /* FXPhotoBrowserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D749C79C1C8004BA008BA347 /* FXPhotoBrowserManager.m */; };
+		D78FDD491C83E11600F073B9 /* FXPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = D78FDD3F1C83E11600F073B9 /* FXPhotoBrowser.m */; };
+		D78FDD4A1C83E11600F073B9 /* FXPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = D78FDD421C83E11600F073B9 /* FXPhotoBrowserView.m */; };
+		D78FDD4B1C83E11600F073B9 /* FXPhotoGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = D78FDD441C83E11600F073B9 /* FXPhotoGroup.m */; };
+		D78FDD4C1C83E11600F073B9 /* FXPhotoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D78FDD461C83E11600F073B9 /* FXPhotoItem.m */; };
+		D78FDD4D1C83E11600F073B9 /* FXWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = D78FDD481C83E11600F073B9 /* FXWaitingView.m */; };
 		D7EF277A1C7D8A77000DA3B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D7EF27791C7D8A77000DA3B4 /* main.m */; };
 		D7EF277D1C7D8A77000DA3B4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D7EF277C1C7D8A77000DA3B4 /* AppDelegate.m */; };
 		D7EF27801C7D8A77000DA3B4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7EF277F1C7D8A77000DA3B4 /* ViewController.m */; };
@@ -18,7 +21,6 @@
 		D7EF27881C7D8A77000DA3B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7EF27861C7D8A77000DA3B4 /* LaunchScreen.storyboard */; };
 		D7EF27931C7D8A77000DA3B4 /* FXPhotoBrowserDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D7EF27921C7D8A77000DA3B4 /* FXPhotoBrowserDemoTests.m */; };
 		D7EF279E1C7D8A77000DA3B4 /* FXPhotoBrowserDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D7EF279D1C7D8A77000DA3B4 /* FXPhotoBrowserDemoUITests.m */; };
-		D7EF27AE1C7D8AD1000DA3B4 /* FXPhotoBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7EF27AD1C7D8AD1000DA3B4 /* FXPhotoBrowserController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,10 +44,17 @@
 		2C9EC2AD9A6607EAA6C99DFE /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		82D0389D9E41BE4FDF64F908 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A8149018B9E7FF35EFC206BD /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		D749C7981C7FF7AB008BA347 /* FXTransitionAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXTransitionAnimation.h; sourceTree = "<group>"; };
-		D749C7991C7FF7AB008BA347 /* FXTransitionAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXTransitionAnimation.m; sourceTree = "<group>"; };
-		D749C79B1C8004BA008BA347 /* FXPhotoBrowserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowserManager.h; sourceTree = "<group>"; };
-		D749C79C1C8004BA008BA347 /* FXPhotoBrowserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXPhotoBrowserManager.m; sourceTree = "<group>"; };
+		D78FDD3E1C83E11600F073B9 /* FXPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowser.h; sourceTree = "<group>"; };
+		D78FDD3F1C83E11600F073B9 /* FXPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXPhotoBrowser.m; sourceTree = "<group>"; };
+		D78FDD401C83E11600F073B9 /* FXPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowserConfig.h; sourceTree = "<group>"; };
+		D78FDD411C83E11600F073B9 /* FXPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowserView.h; sourceTree = "<group>"; };
+		D78FDD421C83E11600F073B9 /* FXPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXPhotoBrowserView.m; sourceTree = "<group>"; };
+		D78FDD431C83E11600F073B9 /* FXPhotoGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoGroup.h; sourceTree = "<group>"; };
+		D78FDD441C83E11600F073B9 /* FXPhotoGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXPhotoGroup.m; sourceTree = "<group>"; };
+		D78FDD451C83E11600F073B9 /* FXPhotoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoItem.h; sourceTree = "<group>"; };
+		D78FDD461C83E11600F073B9 /* FXPhotoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXPhotoItem.m; sourceTree = "<group>"; };
+		D78FDD471C83E11600F073B9 /* FXWaitingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXWaitingView.h; sourceTree = "<group>"; };
+		D78FDD481C83E11600F073B9 /* FXWaitingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXWaitingView.m; sourceTree = "<group>"; };
 		D7EF27751C7D8A77000DA3B4 /* FXPhotoBrowserDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FXPhotoBrowserDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7EF27791C7D8A77000DA3B4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D7EF277B1C7D8A77000DA3B4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -62,8 +71,6 @@
 		D7EF27991C7D8A77000DA3B4 /* FXPhotoBrowserDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FXPhotoBrowserDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7EF279D1C7D8A77000DA3B4 /* FXPhotoBrowserDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FXPhotoBrowserDemoUITests.m; sourceTree = "<group>"; };
 		D7EF279F1C7D8A77000DA3B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D7EF27AC1C7D8AD1000DA3B4 /* FXPhotoBrowserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowserController.h; sourceTree = "<group>"; };
-		D7EF27AD1C7D8AD1000DA3B4 /* FXPhotoBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXPhotoBrowserController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,15 +114,6 @@
 				A8149018B9E7FF35EFC206BD /* libPods.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		D749C7871C7ED8F0008BA347 /* TransitionAnimation */ = {
-			isa = PBXGroup;
-			children = (
-				D749C7981C7FF7AB008BA347 /* FXTransitionAnimation.h */,
-				D749C7991C7FF7AB008BA347 /* FXTransitionAnimation.m */,
-			);
-			path = TransitionAnimation;
 			sourceTree = "<group>";
 		};
 		D7EF276C1C7D8A77000DA3B4 = {
@@ -186,11 +184,17 @@
 		D7EF27AB1C7D8AAA000DA3B4 /* FXPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				D749C7871C7ED8F0008BA347 /* TransitionAnimation */,
-				D7EF27AC1C7D8AD1000DA3B4 /* FXPhotoBrowserController.h */,
-				D7EF27AD1C7D8AD1000DA3B4 /* FXPhotoBrowserController.m */,
-				D749C79B1C8004BA008BA347 /* FXPhotoBrowserManager.h */,
-				D749C79C1C8004BA008BA347 /* FXPhotoBrowserManager.m */,
+				D78FDD3E1C83E11600F073B9 /* FXPhotoBrowser.h */,
+				D78FDD3F1C83E11600F073B9 /* FXPhotoBrowser.m */,
+				D78FDD401C83E11600F073B9 /* FXPhotoBrowserConfig.h */,
+				D78FDD411C83E11600F073B9 /* FXPhotoBrowserView.h */,
+				D78FDD421C83E11600F073B9 /* FXPhotoBrowserView.m */,
+				D78FDD431C83E11600F073B9 /* FXPhotoGroup.h */,
+				D78FDD441C83E11600F073B9 /* FXPhotoGroup.m */,
+				D78FDD451C83E11600F073B9 /* FXPhotoItem.h */,
+				D78FDD461C83E11600F073B9 /* FXPhotoItem.m */,
+				D78FDD471C83E11600F073B9 /* FXWaitingView.h */,
+				D78FDD481C83E11600F073B9 /* FXWaitingView.m */,
 			);
 			path = FXPhotoBrowser;
 			sourceTree = "<group>";
@@ -361,12 +365,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D78FDD4B1C83E11600F073B9 /* FXPhotoGroup.m in Sources */,
+				D78FDD4A1C83E11600F073B9 /* FXPhotoBrowserView.m in Sources */,
 				D7EF27801C7D8A77000DA3B4 /* ViewController.m in Sources */,
-				D749C79A1C7FF7AB008BA347 /* FXTransitionAnimation.m in Sources */,
-				D7EF27AE1C7D8AD1000DA3B4 /* FXPhotoBrowserController.m in Sources */,
 				D7EF277D1C7D8A77000DA3B4 /* AppDelegate.m in Sources */,
 				D7EF277A1C7D8A77000DA3B4 /* main.m in Sources */,
-				D749C79D1C8004BA008BA347 /* FXPhotoBrowserManager.m in Sources */,
+				D78FDD491C83E11600F073B9 /* FXPhotoBrowser.m in Sources */,
+				D78FDD4D1C83E11600F073B9 /* FXWaitingView.m in Sources */,
+				D78FDD4C1C83E11600F073B9 /* FXPhotoItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,6 +515,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FXPhotoBrowserDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = zfx5130.FXPhotoBrowserDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -522,6 +529,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FXPhotoBrowserDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = zfx5130.FXPhotoBrowserDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
