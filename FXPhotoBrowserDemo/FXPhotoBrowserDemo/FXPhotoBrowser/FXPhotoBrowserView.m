@@ -200,7 +200,6 @@ static const CGFloat kMaxZoomScale = 2.0f;
     __weak typeof(self) weakSelf = self;
     [_imageview sd_setImageWithURL:url placeholderImage:placeholder options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize) {
         weakSelf.waitingView.progress = (CGFloat)receivedSize / expectedSize;
-        NSLog(@"::progress:::1:%@", @((CGFloat)receivedSize / expectedSize));
     } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         [weakSelf.waitingView removeFromSuperview];
         if (error) {
@@ -216,7 +215,7 @@ static const CGFloat kMaxZoomScale = 2.0f;
                                                      green:0.1f
                                                       blue:0.1f
                                                      alpha:0.3f];
-            [button setTitle:@"原图加载失败，点击重新加载"
+            [button setTitle:NSLocalizedString(@"原图加载失败，点击重新加载", @"加载失败的信息")
                     forState:UIControlStateNormal];
             [button setTitleColor:[UIColor whiteColor]
                          forState:UIControlStateNormal];
@@ -233,8 +232,8 @@ static const CGFloat kMaxZoomScale = 2.0f;
 #pragma mark - Handlers
 
 - (void)reloadImage {
-    [self setImageWithURL:_imageUrl
-         placeholderImage:_placeHolderImage];
+    [self setImageWithURL:self.imageUrl
+         placeholderImage:self.placeHolderImage];
 }
 
 #pragma mark -UIScrollViewDelegate

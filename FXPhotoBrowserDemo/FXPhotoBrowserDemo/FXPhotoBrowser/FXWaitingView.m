@@ -26,7 +26,6 @@ static const CGFloat kDefaultWaitingViewItemMargin = 5.0f;
 #pragma mark - Setters
 
 - (void)setProgress:(CGFloat)progress {
-    NSLog(@":::进度:::3333:::%@",@(progress));
     _progress = progress;
     [self setNeedsDisplay];
     if (progress >= 1) {

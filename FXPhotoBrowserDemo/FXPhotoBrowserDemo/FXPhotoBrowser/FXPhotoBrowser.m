@@ -152,8 +152,6 @@ UIAlertViewDelegate>
     CGFloat placeImageSizeWidth = tempView.image.size.width;
     CGFloat placeImageSizeHeight = tempView.image.size.height;
     
-    NSLog(@":::::w::%@:::h::%@",@(placeImageSizeWidth), @(placeImageSizeHeight));
-    
     CGFloat placeHolderH = (placeImageSizeHeight * kScreenWidth) / placeImageSizeWidth;
     CGRect targetTemp;
     if (placeHolderH <= KScreenHeight) {
@@ -267,13 +265,13 @@ didFinishSavingWithError:(NSError *)error
     }
     CGPoint touchPoint = [recognizer locationInView:self];
     if (view.scrollview.zoomScale <= 1.0) {
-        
-        CGFloat scaleX = touchPoint.x + view.scrollview.contentOffset.x;//需要放大的图片的X点
-        CGFloat sacleY = touchPoint.y + view.scrollview.contentOffset.y;//需要放大的图片的Y点
-        [view.scrollview zoomToRect:CGRectMake(scaleX, sacleY, 10, 10) animated:YES];
+        CGFloat scaleX = touchPoint.x + view.scrollview.contentOffset.x;
+        CGFloat sacleY = touchPoint.y + view.scrollview.contentOffset.y;
+        [view.scrollview zoomToRect:CGRectMake(scaleX, sacleY, 10, 10)
+                           animated:YES];
         
     } else {
-        [view.scrollview setZoomScale:1.0 animated:YES]; //还原
+        [view.scrollview setZoomScale:1.0 animated:YES];
     }
 }
 
@@ -285,7 +283,6 @@ didFinishSavingWithError:(NSError *)error
 }
 
 - (void)hidePhotoBrowser:(UITapGestureRecognizer *)recognizer {
-    NSLog(@"::sinple::hidden:::view:");
     FXPhotoBrowserView *view = (FXPhotoBrowserView *)recognizer.view;
     UIImageView *currentImageView = view.imageview;
     NSUInteger currentIndex = currentImageView.tag;

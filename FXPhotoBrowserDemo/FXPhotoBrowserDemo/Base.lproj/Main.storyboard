@@ -17,16 +17,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fSp-1B-3EB">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="eHA-bs-a4B"/>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="9bJ-6t-rqC"/>
-                                </connections>
-                            </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kqq-o2-NHo">
-                                <rect key="frame" x="0.0" y="627" width="375" height="40"/>
+                                <rect key="frame" x="0.0" y="220" width="375" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Gcc-2y-y3I"/>
                                 </constraints>
@@ -40,18 +32,17 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="kqq-o2-NHo" secondAttribute="trailing" id="3Ju-3Q-VLG"/>
-                            <constraint firstItem="fSp-1B-3EB" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="3ac-AB-vhJ"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="fSp-1B-3EB" secondAttribute="bottom" id="GBh-It-PRB"/>
-                            <constraint firstAttribute="trailing" secondItem="fSp-1B-3EB" secondAttribute="trailing" id="VCN-vJ-XUw"/>
-                            <constraint firstItem="fSp-1B-3EB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="hb5-Wl-EpT"/>
+                            <constraint firstItem="kqq-o2-NHo" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="200" id="nwd-lc-s6a"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="kqq-o2-NHo" secondAttribute="bottom" id="rbS-FI-6lf"/>
                             <constraint firstItem="kqq-o2-NHo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="siS-do-yIa"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="rbS-FI-6lf"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                    <connections>
-                        <outlet property="tableView" destination="fSp-1B-3EB" id="G8c-BG-o8z"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
