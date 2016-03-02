@@ -9,7 +9,6 @@
 #import "FXPhotoBrowser.h"
 
 #import <SDWebImage/UIImageView+WebCache.h>
-#import <SVProgressHUD/SVProgressHUD.h>
 
 #import "FXPhotoBrowserView.h"
 
@@ -38,7 +37,7 @@ UIAlertViewDelegate>
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor blackColor];
+        [self initialize];
     }
     return self;
 }
@@ -71,6 +70,12 @@ UIAlertViewDelegate>
 }
 
 #pragma mark - Private
+
+- (void)initialize {
+    self.backgroundColor = [UIColor blackColor];
+    self.imageCount = 1;
+    self.currentImageIndex = 0;
+}
 
 - (void)setupToolbars {
     CGRect frame = CGRectMake(0.0f,
@@ -141,11 +146,8 @@ UIAlertViewDelegate>
 }
 
 - (void)showFirstImage {
-    UIView *sourceView = self.sourceImagesContainerView.subviews[self.currentImageIndex];
-    CGRect rect = [self.sourceImagesContainerView convertRect:sourceView.frame
-                                                       toView:self];
     UIImageView *tempView = [[UIImageView alloc] init];
-    tempView.frame = rect;
+    tempView.frame = self.sourceImageView.frame;
     tempView.image = [self placeholderImageForIndex:self.currentImageIndex];
     [self addSubview:tempView];
     tempView.contentMode = UIViewContentModeScaleAspectFit;
@@ -285,10 +287,7 @@ didFinishSavingWithError:(NSError *)error
 - (void)hidePhotoBrowser:(UITapGestureRecognizer *)recognizer {
     FXPhotoBrowserView *view = (FXPhotoBrowserView *)recognizer.view;
     UIImageView *currentImageView = view.imageview;
-    NSUInteger currentIndex = currentImageView.tag;
-    UIView *sourceView = self.sourceImagesContainerView.subviews[currentIndex];
-    CGRect targetTemp = [self.sourceImagesContainerView convertRect:sourceView.frame
-                                                             toView:self];
+    CGRect targetTemp = self.sourceImageView.frame;
     UIImageView *tempImageView = [[UIImageView alloc] init];
     tempImageView.image = currentImageView.image;
     CGFloat tempImageSizeHeight = tempImageView.image.size.height;

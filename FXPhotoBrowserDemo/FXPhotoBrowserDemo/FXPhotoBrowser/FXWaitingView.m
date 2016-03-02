@@ -61,9 +61,7 @@ static const CGFloat kDefaultWaitingViewItemMargin = 5.0f;
     CGContextSetLineCap(ctx, kCGLineCapRound);
     CGContextAddArc(ctx, xCenter, yCenter, radius, - M_PI * 0.5f, to, 0);
     CGContextStrokePath(ctx);
-    
-    
-    
+
 }
 
 @end

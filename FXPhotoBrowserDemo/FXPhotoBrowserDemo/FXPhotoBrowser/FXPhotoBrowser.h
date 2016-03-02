@@ -41,19 +41,19 @@ highQualityImageURLForIndex:(NSInteger)index;
 @interface FXPhotoBrowser : UIView <UIScrollViewDelegate>
 
 /**
- *  the source images container view
+ *  the image container view.
  */
-@property (weak, nonatomic) UIView *sourceImagesContainerView;
+@property (weak, nonatomic) UIView *sourceImageView;
 
 /**
- *  currentImageIndex
- */
-@property (assign, nonatomic) NSInteger currentImageIndex;
-
-/**
- *  the image Count
+ *  the image Count, if the image count is one, you can not set it, default imagecount is one.
  */
 @property (assign, nonatomic) NSInteger imageCount;
+
+/**
+ *  the current ImageIndex, if the image count is one, you can not set it.
+ */
+@property (assign, nonatomic) NSInteger currentImageIndex;
 
 /**
  *  delegate

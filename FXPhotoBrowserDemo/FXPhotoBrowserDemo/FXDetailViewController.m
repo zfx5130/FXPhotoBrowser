@@ -66,7 +66,7 @@
 - (void)tap:(UIGestureRecognizer *)tapGesture {
    UIImageView *imageView = (UIImageView *)tapGesture.view;
     FXPhotoBrowser *browser = [[FXPhotoBrowser alloc] init];
-    browser.sourceImagesContainerView = self.view;
+    browser.sourceImageView = imageView;
     browser.imageCount = 2;
     browser.currentImageIndex = imageView.tag;
     browser.delegate = self;
@@ -77,7 +77,6 @@
 
 - (UIImage *)photoBrowser:(FXPhotoBrowser *)browser
  placeholderImageForIndex:(NSInteger)index {
-
     return ((UIImageView *)self.view.subviews[index]).image;
 }
 
