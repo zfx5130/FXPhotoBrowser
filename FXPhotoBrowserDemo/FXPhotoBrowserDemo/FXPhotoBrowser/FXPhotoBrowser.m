@@ -293,7 +293,6 @@ didFinishSavingWithError:(NSError *)error
     CGFloat tempImageSizeHeight = tempImageView.image.size.height;
     CGFloat tempImageSizeWidth = tempImageView.image.size.width;
     CGFloat tempImageViewHeight = (tempImageSizeHeight * kScreenWidth) / tempImageSizeWidth;
-    
     CGRect frame;
     if (tempImageViewHeight < KScreenHeight) {
         frame = CGRectMake(0,
