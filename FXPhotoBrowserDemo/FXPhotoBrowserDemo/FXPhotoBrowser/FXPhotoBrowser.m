@@ -49,6 +49,7 @@ UIAlertViewDelegate>
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    NSLog(@"+++++++++++++++layoutSubviews+++++++++++");
     CGRect rect = self.bounds;
     rect.size.width += kDefaultImageViewPadding * 2;
     self.scrollView.bounds = rect;
@@ -251,11 +252,11 @@ didFinishSavingWithError:(NSError *)error
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer {
     UIAlertView *alertView =
-    [[UIAlertView alloc] initWithTitle:@"是否保存图片到相册"
+    [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"是否保存图片到相册", @"是否保存图片到相册")
                                message:nil
                               delegate:self
-                     cancelButtonTitle:@"否"
-                     otherButtonTitles:@"是", nil];
+                     cancelButtonTitle:NSLocalizedString(@"否", @"否")
+                     otherButtonTitles:NSLocalizedString(@"是", @"是"), nil];
     alertView.tag = 100;
     [alertView show];
 }
@@ -288,6 +289,7 @@ didFinishSavingWithError:(NSError *)error
     FXPhotoBrowserView *view = (FXPhotoBrowserView *)recognizer.view;
     UIImageView *currentImageView = view.imageview;
     CGRect targetTemp = self.sourceImageView.frame;
+    
     UIImageView *tempImageView = [[UIImageView alloc] init];
     tempImageView.image = currentImageView.image;
     CGFloat tempImageSizeHeight = tempImageView.image.size.height;

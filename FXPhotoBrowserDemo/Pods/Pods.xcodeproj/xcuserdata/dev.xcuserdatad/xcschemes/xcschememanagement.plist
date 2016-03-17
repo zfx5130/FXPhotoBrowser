@@ -4,22 +4,12 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>DGActivityIndicatorView.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>SDWebImage.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>SVProgressHUD.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -32,17 +22,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>59CCD67393486EA3E8557000F4E72B48</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>59E3FD9D631A0892BB806DA76F9D4E87</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>B281DA29A9C3EDFB45BA53651F6BA611</key>
+		<key>6FCC31A2CAFB882E89704747F16D1952</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -1,18 +1,12 @@
 PODS:
-  - DGActivityIndicatorView (2.0)
   - SDWebImage (3.7.5):
     - SDWebImage/Core (= 3.7.5)
   - SDWebImage/Core (3.7.5)
-  - SVProgressHUD (1.1.3)
 
 DEPENDENCIES:
-  - DGActivityIndicatorView
   - SDWebImage
-  - SVProgressHUD
 
 SPEC CHECKSUMS:
-  DGActivityIndicatorView: 52875b025a6ccf6a431a905285c12e2bb95eb559
   SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
-  SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
 
 COCOAPODS: 0.38.2

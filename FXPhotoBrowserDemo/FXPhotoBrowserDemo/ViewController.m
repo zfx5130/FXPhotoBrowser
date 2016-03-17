@@ -19,20 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    /**
-     *
-     * 目前图片加载过程:
-     * 1.默认图片大图展示0.35s后消失.
-     * 2.加载大图和进度值
-     * 3.加载完成
-     *  
-     * 要做的:
-     *  1.开始默认图片和加载圈
-     *  2.当图片加载完,加载圈消失,图片动画展示.
-     */
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
