@@ -28,15 +28,22 @@ UIAlertViewDelegate>
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) UIView *contentView;
 
+@property (strong, nonatomic) UIView *selectedImageView;
+@property (strong, nonatomic) UIImage *placeHolderImage;
+@property (assign, nonatomic) NSInteger imageCount;
+@property (copy, nonatomic) NSArray *imageUrls;
+
 @end
 
 @implementation FXPhotoBrowser
 
 #pragma mark - Lifecycle
-
-- (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
+- (instancetype)initWithUIView:(UIView *)selectedImageView
+              placeHolderImage:(UIImage *)placeHolderImage {
+    self = [super init];
     if (self) {
+        _selectedImageView = selectedImageView;
+        _placeHolderImage = placeHolderImage;
         [self initialize];
     }
     return self;
@@ -49,7 +56,6 @@ UIAlertViewDelegate>
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    NSLog(@"+++++++++++++++layoutSubviews+++++++++++");
     CGRect rect = self.bounds;
     rect.size.width += kDefaultImageViewPadding * 2;
     self.scrollView.bounds = rect;
@@ -70,11 +76,32 @@ UIAlertViewDelegate>
     }
 }
 
+#pragma mark - Getters
+
+- (NSInteger)imageCount {
+    if (!_imageCount) {
+        if ([self.delegate respondsToSelector:@selector(imageCountForPhotoBrowser:)]) {
+            _imageCount = [self.delegate imageCountForPhotoBrowser:self];
+        } else {
+            _imageCount = 1;
+        }
+    }
+    return _imageCount;
+}
+
+- (NSArray *)imageUrls {
+    if (!_imageUrls) {
+        if ([self.delegate respondsToSelector:@selector(imageUrlsForPhotoBrowser:)]) {
+            _imageUrls = [self.delegate imageUrlsForPhotoBrowser:self];
+        }
+    }
+    return _imageUrls;
+}
+
 #pragma mark - Private
 
 - (void)initialize {
     self.backgroundColor = [UIColor blackColor];
-    self.imageCount = 1;
     self.currentImageIndex = 0;
 }
 
@@ -84,7 +111,7 @@ UIAlertViewDelegate>
                               kScreenWidth,
                               kPageControlHeight);
     self.pageControl = [[UIPageControl alloc] initWithFrame:frame];
-    self.pageControl.numberOfPages = self.imageCount;
+    self.pageControl.numberOfPages = [self imageCount];
     self.pageControl.hidesForSinglePage = YES;
     [self addSubview:self.pageControl];
 }
@@ -97,7 +124,7 @@ UIAlertViewDelegate>
     self.scrollView.pagingEnabled = YES;
     [self addSubview:self.scrollView];
     
-    for (int i = 0; i < self.imageCount; i++) {
+    for (int i = 0; i < [self imageCount]; i++) {
         FXPhotoBrowserView *view = [[FXPhotoBrowserView alloc] init];
         view.imageview.tag = i;
         __weak typeof(self) weakSelf = self;
@@ -120,11 +147,11 @@ UIAlertViewDelegate>
     if (view.beginLoadingImage) {
         return;
     }
-    if ([self highQualityImageURLForIndex:index]) {
-        [view setImageWithURL:[self highQualityImageURLForIndex:index]
-             placeholderImage:[self placeholderImageForIndex:index]];
+    if ([self imageUrls]) {
+        [view setImageWithURL:self.imageUrls[index]
+             placeholderImage:self.placeHolderImage];
     } else {
-        view.imageview.image = [self placeholderImageForIndex:index];
+        view.imageview.image = self.placeHolderImage;
     }
     view.beginLoadingImage = YES;
 }
@@ -148,8 +175,8 @@ UIAlertViewDelegate>
 
 - (void)showFirstImage {
     UIImageView *tempView = [[UIImageView alloc] init];
-    tempView.frame = self.sourceImageView.frame;
-    tempView.image = [self placeholderImageForIndex:self.currentImageIndex];
+    tempView.frame = self.selectedImageView.frame;
+    tempView.image = self.placeHolderImage;
     [self addSubview:tempView];
     tempView.contentMode = UIViewContentModeScaleAspectFit;
     CGFloat placeImageSizeWidth = tempView.image.size.width;
@@ -176,20 +203,6 @@ UIAlertViewDelegate>
         [tempView removeFromSuperview];
         self.scrollView.hidden = NO;
     }];
-}
-
-- (UIImage *)placeholderImageForIndex:(NSInteger)index {
-    if ([self.delegate respondsToSelector:@selector(photoBrowser:placeholderImageForIndex:)]) {
-        return [self.delegate photoBrowser:self placeholderImageForIndex:index];
-    }
-    return nil;
-}
-
-- (NSURL *)highQualityImageURLForIndex:(NSInteger)index {
-    if ([self.delegate respondsToSelector:@selector(photoBrowser:highQualityImageURLForIndex:)]) {
-        return [self.delegate photoBrowser:self highQualityImageURLForIndex:index];
-    }
-    return nil;
 }
 
 - (void)showAlertMessageWithTitle:(NSString *)title {
@@ -274,7 +287,8 @@ didFinishSavingWithError:(NSError *)error
                            animated:YES];
         
     } else {
-        [view.scrollview setZoomScale:1.0 animated:YES];
+        [view.scrollview setZoomScale:1.0
+                             animated:YES];
     }
 }
 
@@ -288,7 +302,7 @@ didFinishSavingWithError:(NSError *)error
 - (void)hidePhotoBrowser:(UITapGestureRecognizer *)recognizer {
     FXPhotoBrowserView *view = (FXPhotoBrowserView *)recognizer.view;
     UIImageView *currentImageView = view.imageview;
-    CGRect targetTemp = self.sourceImageView.frame;
+    CGRect targetTemp = self.selectedImageView.frame;
     
     UIImageView *tempImageView = [[UIImageView alloc] init];
     tempImageView.image = currentImageView.image;

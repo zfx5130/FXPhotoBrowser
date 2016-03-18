@@ -12,43 +12,29 @@
 
 @protocol FXPhotoBrowserDelegate <NSObject>
 
-/**
- *  the placeholder image
- *
- *  @param browser self
- *  @param index   current index
- *
- *  @return current image
- */
-
-- (UIImage *)photoBrowser:(FXPhotoBrowser *)browser
- placeholderImageForIndex:(NSInteger)index;
+@required
 
 /**
- *  the highQualityImage Url
+ *  imageUrls
  *
- *  @param browser self
- *  @param index   current index
+ *  @param browser browser
  *
- *  @return current imageurl
+ *  @return urls
  */
+- (NSArray<NSString *> *)imageUrlsForPhotoBrowser:(FXPhotoBrowser *)browser;
 
-- (NSURL *)photoBrowser:(FXPhotoBrowser *)browser
-highQualityImageURLForIndex:(NSInteger)index;
+/**
+ *  image count
+ *
+ *  @param browser browser
+ *
+ *  @return imageCount
+ */
+- (NSInteger)imageCountForPhotoBrowser:(FXPhotoBrowser *)browser;
 
 @end
 
 @interface FXPhotoBrowser : UIView <UIScrollViewDelegate>
-
-/**
- *  the image container view.
- */
-@property (weak, nonatomic) UIView *sourceImageView;
-
-/**
- *  the image Count, if the image count is one, you can not set it, default imagecount is one.
- */
-@property (assign, nonatomic) NSInteger imageCount;
 
 /**
  *  the current ImageIndex, if the image count is one, you can not set it.
@@ -61,8 +47,21 @@ highQualityImageURLForIndex:(NSInteger)index;
 @property (weak, nonatomic) id<FXPhotoBrowserDelegate> delegate;
 
 /**
- *  the photo bro
+ *  initialize
+ *
+ *  @param selectedImageView selected imageView
+ *  @param placeHolderImage placeHolder image
+ *
+ *  @return
+ */
+- (instancetype)initWithUIView:(UIView *)selectedImageView
+              placeHolderImage:(UIImage *)placeHolderImage;
+
+/**
+ *  the photo browser show
  */
 - (void)show;
+
+
 
 @end

@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *clickImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *secondImageView;
 
+@property (copy, nonatomic) NSArray *imageUrls;
+
 @end
 
 @interface FXDetailViewController ()
@@ -56,6 +58,17 @@
     
 }
 
+#pragma mark - Getters
+
+- (NSArray *)imageUrls {
+    if (!_imageUrls) {
+        _imageUrls = @[@"http://ww2.sinaimg.cn/bmiddle/642beb18gw1ep3629gfm0g206o050b2a.gif",
+                       @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg"
+                       ];
+    }
+    return _imageUrls;
+}
+
 #pragma mark - Handlers
 
 - (IBAction)tapGesture:(UITapGestureRecognizer *)sender {
@@ -65,9 +78,8 @@
 
 - (void)tap:(UIGestureRecognizer *)tapGesture {
    UIImageView *imageView = (UIImageView *)tapGesture.view;
-    FXPhotoBrowser *browser = [[FXPhotoBrowser alloc] init];
-    browser.sourceImageView = imageView;
-    browser.imageCount = 2;
+    FXPhotoBrowser *browser = [[FXPhotoBrowser alloc] initWithUIView:imageView
+                                                    placeHolderImage:imageView.image];
     browser.currentImageIndex = imageView.tag;
     browser.delegate = self;
     [browser show];
@@ -75,20 +87,12 @@
 
 #pragma mark - FXPhotoBrowserDelegate
 
-- (UIImage *)photoBrowser:(FXPhotoBrowser *)browser
- placeholderImageForIndex:(NSInteger)index {
-    return ((UIImageView *)self.view.subviews[index]).image;
+- (NSInteger)imageCountForPhotoBrowser:(FXPhotoBrowser *)browser {
+    return [self.imageUrls count];
 }
 
-- (NSURL *)photoBrowser:(FXPhotoBrowser *)browser
-highQualityImageURLForIndex:(NSInteger)index {
-    NSString *urlStr;
-    if (!index) {
-        urlStr = @"http://ww2.sinaimg.cn/bmiddle/642beb18gw1ep3629gfm0g206o050b2a.gif";
-    } else {
-        urlStr = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
-    }
-    return [NSURL URLWithString:urlStr];
+- (NSArray<NSString *> *)imageUrlsForPhotoBrowser:(FXPhotoBrowser *)browser {
+    return self.imageUrls;
 }
 
 

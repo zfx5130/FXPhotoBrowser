@@ -186,9 +186,9 @@
 		D7EF27AB1C7D8AAA000DA3B4 /* FXPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				D78FDD401C83E11600F073B9 /* FXPhotoBrowserConfig.h */,
 				D78FDD3E1C83E11600F073B9 /* FXPhotoBrowser.h */,
 				D78FDD3F1C83E11600F073B9 /* FXPhotoBrowser.m */,
-				D78FDD401C83E11600F073B9 /* FXPhotoBrowserConfig.h */,
 				D78FDD411C83E11600F073B9 /* FXPhotoBrowserView.h */,
 				D78FDD421C83E11600F073B9 /* FXPhotoBrowserView.m */,
 				D78FDD471C83E11600F073B9 /* FXWaitingView.h */,
@@ -267,6 +267,7 @@
 				TargetAttributes = {
 					D7EF27741C7D8A77000DA3B4 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = BC54D3P3MH;
 					};
 					D7EF278D1C7D8A77000DA3B4 = {
 						CreatedOnToolsVersion = 7.2;
@@ -512,11 +513,14 @@
 			baseConfigurationReference = 82D0389D9E41BE4FDF64F908 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = FXPhotoBrowserDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = zfx5130.FXPhotoBrowserDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -526,11 +530,14 @@
 			baseConfigurationReference = 2C9EC2AD9A6607EAA6C99DFE /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = FXPhotoBrowserDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = zfx5130.FXPhotoBrowserDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
