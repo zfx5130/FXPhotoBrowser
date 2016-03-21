@@ -175,7 +175,9 @@ UIAlertViewDelegate>
 
 - (void)showFirstImage {
     UIImageView *tempView = [[UIImageView alloc] init];
-    tempView.frame = self.selectedImageView.frame;
+    tempView.frame = [self.selectedImageView.superview convertRect:self.selectedImageView.frame
+                                                            toView:self];
+
     tempView.image = self.placeHolderImage;
     [self addSubview:tempView];
     tempView.contentMode = UIViewContentModeScaleAspectFit;
@@ -302,7 +304,8 @@ didFinishSavingWithError:(NSError *)error
 - (void)hidePhotoBrowser:(UITapGestureRecognizer *)recognizer {
     FXPhotoBrowserView *view = (FXPhotoBrowserView *)recognizer.view;
     UIImageView *currentImageView = view.imageview;
-    CGRect targetTemp = self.selectedImageView.frame;
+    CGRect targetTemp = [self.selectedImageView.superview convertRect:self.selectedImageView.frame
+                                                               toView:self];
     
     UIImageView *tempImageView = [[UIImageView alloc] init];
     tempImageView.image = currentImageView.image;
