@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		3A47E3DB84FBB08D4E93A113 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8149018B9E7FF35EFC206BD /* libPods.a */; };
-		D78FDD491C83E11600F073B9 /* FXPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = D78FDD3F1C83E11600F073B9 /* FXPhotoBrowser.m */; };
-		D78FDD4A1C83E11600F073B9 /* FXPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = D78FDD421C83E11600F073B9 /* FXPhotoBrowserView.m */; };
-		D78FDD4D1C83E11600F073B9 /* FXWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = D78FDD481C83E11600F073B9 /* FXWaitingView.m */; };
+		D717CC741C9FF12A00A1CA8E /* FXPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = D717CC6E1C9FF12A00A1CA8E /* FXPhotoBrowser.m */; };
+		D717CC751C9FF12A00A1CA8E /* FXPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = D717CC711C9FF12A00A1CA8E /* FXPhotoBrowserView.m */; };
+		D717CC761C9FF12A00A1CA8E /* FXWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = D717CC731C9FF12A00A1CA8E /* FXWaitingView.m */; };
 		D78FDD511C867A3C00F073B9 /* FXDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D78FDD4F1C867A3C00F073B9 /* FXDetailViewController.m */; };
 		D78FDD521C867A3C00F073B9 /* FXDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D78FDD501C867A3C00F073B9 /* FXDetailViewController.xib */; };
 		D7EF277A1C7D8A77000DA3B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D7EF27791C7D8A77000DA3B4 /* main.m */; };
@@ -44,13 +44,13 @@
 		2C9EC2AD9A6607EAA6C99DFE /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		82D0389D9E41BE4FDF64F908 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A8149018B9E7FF35EFC206BD /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		D78FDD3E1C83E11600F073B9 /* FXPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowser.h; sourceTree = "<group>"; };
-		D78FDD3F1C83E11600F073B9 /* FXPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXPhotoBrowser.m; sourceTree = "<group>"; };
-		D78FDD401C83E11600F073B9 /* FXPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowserConfig.h; sourceTree = "<group>"; };
-		D78FDD411C83E11600F073B9 /* FXPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowserView.h; sourceTree = "<group>"; };
-		D78FDD421C83E11600F073B9 /* FXPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXPhotoBrowserView.m; sourceTree = "<group>"; };
-		D78FDD471C83E11600F073B9 /* FXWaitingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXWaitingView.h; sourceTree = "<group>"; };
-		D78FDD481C83E11600F073B9 /* FXWaitingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXWaitingView.m; sourceTree = "<group>"; };
+		D717CC6D1C9FF12A00A1CA8E /* FXPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowser.h; sourceTree = "<group>"; };
+		D717CC6E1C9FF12A00A1CA8E /* FXPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXPhotoBrowser.m; sourceTree = "<group>"; };
+		D717CC6F1C9FF12A00A1CA8E /* FXPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowserConfig.h; sourceTree = "<group>"; };
+		D717CC701C9FF12A00A1CA8E /* FXPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowserView.h; sourceTree = "<group>"; };
+		D717CC711C9FF12A00A1CA8E /* FXPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXPhotoBrowserView.m; sourceTree = "<group>"; };
+		D717CC721C9FF12A00A1CA8E /* FXWaitingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXWaitingView.h; sourceTree = "<group>"; };
+		D717CC731C9FF12A00A1CA8E /* FXWaitingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXWaitingView.m; sourceTree = "<group>"; };
 		D78FDD4E1C867A3C00F073B9 /* FXDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXDetailViewController.h; sourceTree = "<group>"; };
 		D78FDD4F1C867A3C00F073B9 /* FXDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXDetailViewController.m; sourceTree = "<group>"; };
 		D78FDD501C867A3C00F073B9 /* FXDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FXDetailViewController.xib; sourceTree = "<group>"; };
@@ -186,13 +186,13 @@
 		D7EF27AB1C7D8AAA000DA3B4 /* FXPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				D78FDD401C83E11600F073B9 /* FXPhotoBrowserConfig.h */,
-				D78FDD3E1C83E11600F073B9 /* FXPhotoBrowser.h */,
-				D78FDD3F1C83E11600F073B9 /* FXPhotoBrowser.m */,
-				D78FDD411C83E11600F073B9 /* FXPhotoBrowserView.h */,
-				D78FDD421C83E11600F073B9 /* FXPhotoBrowserView.m */,
-				D78FDD471C83E11600F073B9 /* FXWaitingView.h */,
-				D78FDD481C83E11600F073B9 /* FXWaitingView.m */,
+				D717CC6D1C9FF12A00A1CA8E /* FXPhotoBrowser.h */,
+				D717CC6E1C9FF12A00A1CA8E /* FXPhotoBrowser.m */,
+				D717CC6F1C9FF12A00A1CA8E /* FXPhotoBrowserConfig.h */,
+				D717CC701C9FF12A00A1CA8E /* FXPhotoBrowserView.h */,
+				D717CC711C9FF12A00A1CA8E /* FXPhotoBrowserView.m */,
+				D717CC721C9FF12A00A1CA8E /* FXWaitingView.h */,
+				D717CC731C9FF12A00A1CA8E /* FXWaitingView.m */,
 			);
 			path = FXPhotoBrowser;
 			sourceTree = "<group>";
@@ -365,13 +365,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D78FDD4A1C83E11600F073B9 /* FXPhotoBrowserView.m in Sources */,
+				D717CC751C9FF12A00A1CA8E /* FXPhotoBrowserView.m in Sources */,
 				D7EF27801C7D8A77000DA3B4 /* ViewController.m in Sources */,
+				D717CC761C9FF12A00A1CA8E /* FXWaitingView.m in Sources */,
+				D717CC741C9FF12A00A1CA8E /* FXPhotoBrowser.m in Sources */,
 				D7EF277D1C7D8A77000DA3B4 /* AppDelegate.m in Sources */,
 				D7EF277A1C7D8A77000DA3B4 /* main.m in Sources */,
 				D78FDD511C867A3C00F073B9 /* FXDetailViewController.m in Sources */,
-				D78FDD491C83E11600F073B9 /* FXPhotoBrowser.m in Sources */,
-				D78FDD4D1C83E11600F073B9 /* FXWaitingView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

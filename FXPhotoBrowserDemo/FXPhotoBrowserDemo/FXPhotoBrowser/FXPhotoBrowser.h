@@ -10,9 +10,7 @@
 
 @class FXPhotoBrowser;
 
-@protocol FXPhotoBrowserDelegate <NSObject>
-
-@required
+@protocol FXPhotoBrowserDataSource <NSObject>
 
 /**
  *  imageUrls
@@ -24,7 +22,18 @@
 - (NSArray<NSString *> *)imageUrlsForPhotoBrowser:(FXPhotoBrowser *)browser;
 
 /**
- *  image count
+ *  images
+ *
+ *  @param placeHolderImage
+ *
+ *  @return the palceHolderImages
+ */
+- (NSArray<UIImage *> *)placeHolderForPhotoBrowser:(FXPhotoBrowser *)browser;
+
+@optional
+
+/**
+ *  image count, default the image count is 1
  *
  *  @param browser browser
  *
@@ -44,18 +53,16 @@
 /**
  *  delegate
  */
-@property (weak, nonatomic) id<FXPhotoBrowserDelegate> delegate;
+@property (weak, nonatomic) id<FXPhotoBrowserDataSource> dataSource;
 
 /**
  *  initialize
  *
  *  @param selectedImageView selected imageView
- *  @param placeHolderImage placeHolder image
  *
  *  @return
  */
-- (instancetype)initWithUIView:(UIView *)selectedImageView
-              placeHolderImage:(UIImage *)placeHolderImage;
+- (instancetype)initWithUIView:(UIView *)selectedImageView;
 
 /**
  *  the photo browser show

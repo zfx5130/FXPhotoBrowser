@@ -29,21 +29,19 @@ UIAlertViewDelegate>
 @property (strong, nonatomic) UIView *contentView;
 
 @property (strong, nonatomic) UIView *selectedImageView;
-@property (strong, nonatomic) UIImage *placeHolderImage;
 @property (assign, nonatomic) NSInteger imageCount;
 @property (copy, nonatomic) NSArray *imageUrls;
+@property (copy, nonatomic) NSArray *placeHolderImages;
 
 @end
 
 @implementation FXPhotoBrowser
 
 #pragma mark - Lifecycle
-- (instancetype)initWithUIView:(UIView *)selectedImageView
-              placeHolderImage:(UIImage *)placeHolderImage {
+- (instancetype)initWithUIView:(UIView *)selectedImageView {
     self = [super init];
     if (self) {
         _selectedImageView = selectedImageView;
-        _placeHolderImage = placeHolderImage;
         [self initialize];
     }
     return self;
@@ -80,8 +78,8 @@ UIAlertViewDelegate>
 
 - (NSInteger)imageCount {
     if (!_imageCount) {
-        if ([self.delegate respondsToSelector:@selector(imageCountForPhotoBrowser:)]) {
-            _imageCount = [self.delegate imageCountForPhotoBrowser:self];
+        if ([self.dataSource respondsToSelector:@selector(imageCountForPhotoBrowser:)]) {
+            _imageCount = [self.dataSource imageCountForPhotoBrowser:self];
         } else {
             _imageCount = 1;
         }
@@ -91,11 +89,20 @@ UIAlertViewDelegate>
 
 - (NSArray *)imageUrls {
     if (!_imageUrls) {
-        if ([self.delegate respondsToSelector:@selector(imageUrlsForPhotoBrowser:)]) {
-            _imageUrls = [self.delegate imageUrlsForPhotoBrowser:self];
+        if ([self.dataSource respondsToSelector:@selector(imageUrlsForPhotoBrowser:)]) {
+            _imageUrls = [self.dataSource imageUrlsForPhotoBrowser:self];
         }
     }
     return _imageUrls;
+}
+
+- (NSArray *)placeHolderImages {
+    if (!_placeHolderImages) {
+        if ([self.dataSource respondsToSelector:@selector(placeHolderForPhotoBrowser:)]) {
+            _placeHolderImages = [self.dataSource placeHolderForPhotoBrowser:self];
+        }
+    }
+    return _placeHolderImages;
 }
 
 #pragma mark - Private
@@ -148,10 +155,10 @@ UIAlertViewDelegate>
         return;
     }
     if ([self imageUrls]) {
-        [view setImageWithURL:self.imageUrls[index]
-             placeholderImage:self.placeHolderImage];
+        [view setImageWithURL:[NSURL URLWithString:self.imageUrls[index]]
+             placeholderImage:self.placeHolderImages[index]];
     } else {
-        view.imageview.image = self.placeHolderImage;
+        view.imageview.image = [UIImage imageNamed:@"nearby_friend_no_vehicle_image"];
     }
     view.beginLoadingImage = YES;
 }
@@ -178,7 +185,7 @@ UIAlertViewDelegate>
     tempView.frame = [self.selectedImageView.superview convertRect:self.selectedImageView.frame
                                                             toView:self];
 
-    tempView.image = self.placeHolderImage;
+    tempView.image = self.placeHolderImages[self.currentImageIndex];
     [self addSubview:tempView];
     tempView.contentMode = UIViewContentModeScaleAspectFit;
     CGFloat placeImageSizeWidth = tempView.image.size.width;
@@ -306,7 +313,7 @@ didFinishSavingWithError:(NSError *)error
     UIImageView *currentImageView = view.imageview;
     CGRect targetTemp = [self.selectedImageView.superview convertRect:self.selectedImageView.frame
                                                                toView:self];
-    
+
     UIImageView *tempImageView = [[UIImageView alloc] init];
     tempImageView.image = currentImageView.image;
     CGFloat tempImageSizeHeight = tempImageView.image.size.height;

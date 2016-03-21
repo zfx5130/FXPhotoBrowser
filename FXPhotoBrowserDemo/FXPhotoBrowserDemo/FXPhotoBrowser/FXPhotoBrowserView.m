@@ -198,7 +198,7 @@ static const CGFloat kMaxZoomScale = 2.0f;
     self.waitingView = waitingView;
     [self addSubview:waitingView];
     __weak typeof(self) weakSelf = self;
-    [_imageview sd_setImageWithURL:url placeholderImage:placeholder options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+    [self.imageview sd_setImageWithURL:url placeholderImage:placeholder options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize) {
         weakSelf.waitingView.progress = (CGFloat)receivedSize / expectedSize;
     } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         [weakSelf.waitingView removeFromSuperview];

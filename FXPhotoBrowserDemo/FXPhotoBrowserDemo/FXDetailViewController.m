@@ -11,13 +11,13 @@
 #import <UIImageView+WebCache.h>
 
 @interface FXDetailViewController ()
-<FXPhotoBrowserDelegate>
+<FXPhotoBrowserDataSource>
 
 @property (weak, nonatomic) IBOutlet UIImageView *clickImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *secondImageView;
 
 @property (copy, nonatomic) NSArray *imageUrls;
-
+@property (strong, nonatomic) UIImage *image;
 @end
 
 @interface FXDetailViewController ()
@@ -78,14 +78,14 @@
 
 - (void)tap:(UIGestureRecognizer *)tapGesture {
    UIImageView *imageView = (UIImageView *)tapGesture.view;
-    FXPhotoBrowser *browser = [[FXPhotoBrowser alloc] initWithUIView:imageView
-                                                    placeHolderImage:imageView.image];
+    FXPhotoBrowser *browser = [[FXPhotoBrowser alloc] initWithUIView:imageView];
     browser.currentImageIndex = imageView.tag;
-    browser.delegate = self;
+    browser.dataSource = self;
+    self.image = imageView.image;
     [browser show];
 }
 
-#pragma mark - FXPhotoBrowserDelegate
+#pragma mark - FXPhotoBrowserDataSource
 
 - (NSInteger)imageCountForPhotoBrowser:(FXPhotoBrowser *)browser {
     return [self.imageUrls count];
@@ -93,6 +93,10 @@
 
 - (NSArray<NSString *> *)imageUrlsForPhotoBrowser:(FXPhotoBrowser *)browser {
     return self.imageUrls;
+}
+
+- (NSArray<UIImage *> *)placeHolderForPhotoBrowser:(FXPhotoBrowser *)browser {
+    return @[self.image];
 }
 
 
