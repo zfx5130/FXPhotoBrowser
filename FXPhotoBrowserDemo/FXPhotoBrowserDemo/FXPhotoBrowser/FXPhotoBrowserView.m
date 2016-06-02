@@ -10,7 +10,7 @@
 #import "FXWaitingView.h"
 #import "UIImageView+WebCache.h"
 
-static const CGFloat kMinZoomScale = 0.6f;
+static const CGFloat kMinZoomScale = 1.0f;
 static const CGFloat kMaxZoomScale = 2.0f;
 
 @interface FXPhotoBrowserView()
@@ -199,7 +199,9 @@ static const CGFloat kMaxZoomScale = 2.0f;
     [self addSubview:waitingView];
     __weak typeof(self) weakSelf = self;
     [self.imageview sd_setImageWithURL:url placeholderImage:placeholder options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-        weakSelf.waitingView.progress = (CGFloat)receivedSize / expectedSize;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.waitingView.progress = (CGFloat)receivedSize / expectedSize;
+        });
     } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         [weakSelf.waitingView removeFromSuperview];
         if (error) {
@@ -215,7 +217,7 @@ static const CGFloat kMaxZoomScale = 2.0f;
                                                      green:0.1f
                                                       blue:0.1f
                                                      alpha:0.3f];
-            [button setTitle:NSLocalizedString(@"原图加载失败，点击重新加载", @"加载失败的信息")
+            [button setTitle:NSLocalizedString(@"BUTTON_TITLE_PIC_DOWNLOAD_FAILED", @"BUTTON_TITLE_PIC_DOWNLOAD_FAILED")
                     forState:UIControlStateNormal];
             [button setTitleColor:[UIColor whiteColor]
                          forState:UIControlStateNormal];

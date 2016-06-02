@@ -14,6 +14,9 @@
 
 #import "FXPhotoBrowserConfig.h"
 
+//test
+#import "UIScrollView+Custom.h"
+
 static const CGFloat kDefaultAnimationDuration = 0.35f;
 static const CGFloat kPageControlHeight = 50.0f;
 static const CGFloat kDefaultImageViewPadding = 10.0f;
@@ -74,7 +77,7 @@ UIAlertViewDelegate>
     }
 }
 
-#pragma mark - Getters
+#pragma mark - Setter & Getters
 
 - (NSInteger)imageCount {
     if (!_imageCount) {
@@ -158,7 +161,7 @@ UIAlertViewDelegate>
         [view setImageWithURL:[NSURL URLWithString:self.imageUrls[index]]
              placeholderImage:self.placeHolderImages[index]];
     } else {
-        view.imageview.image = [UIImage imageNamed:@"nearby_friend_no_vehicle_image"];
+        view.imageview.image = [UIImage imageNamed:@"default_topic_image"];
     }
     view.beginLoadingImage = YES;
 }
@@ -184,10 +187,9 @@ UIAlertViewDelegate>
     UIImageView *tempView = [[UIImageView alloc] init];
     tempView.frame = [self.selectedImageView.superview convertRect:self.selectedImageView.frame
                                                             toView:self];
-
     tempView.image = self.placeHolderImages[self.currentImageIndex];
     [self addSubview:tempView];
-    tempView.contentMode = UIViewContentModeScaleAspectFit;
+    tempView.contentMode = UIViewContentModeScaleAspectFill;
     CGFloat placeImageSizeWidth = tempView.image.size.width;
     CGFloat placeImageSizeHeight = tempView.image.size.height;
     
@@ -219,7 +221,7 @@ UIAlertViewDelegate>
                                                         message:nil
                                                        delegate:self
                                               cancelButtonTitle:nil
-                                              otherButtonTitles:@"确定", nil];
+                                              otherButtonTitles:NSLocalizedString(@"UIBUTTON_TITLE_DETERMINE", @"UIBUTTON_TITLE_DETERMINE"), nil];
     [alertView show];
 }
 
@@ -266,19 +268,19 @@ clickedButtonAtIndex:(NSInteger)buttonIndex {
 didFinishSavingWithError:(NSError *)error
   contextInfo:(void *)contextInfo {
     if (error) {
-        [self showAlertMessageWithTitle:NSLocalizedString(@"保存失败", @"保存失败的提示")];
+        [self showAlertMessageWithTitle:NSLocalizedString(@"UIBUTTON_TITLE_SAVING_FAILED", @"UIBUTTON_TITLE_SAVING_FAILED")];
     } else {
-        [self showAlertMessageWithTitle:NSLocalizedString(@"保存成功", @"保存成功的提示")];
+        [self showAlertMessageWithTitle:NSLocalizedString(@"UIBUTTON_TITLE_SAVING_SUCCEED", @"UIBUTTON_TITLE_SAVING_SUCCEED")];
     }
 }
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer {
     UIAlertView *alertView =
-    [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"是否保存图片到相册", @"是否保存图片到相册")
+    [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"NOTIFY_TITLE_SAVE_PHOTO", @"NOTIFY_TITLE_SAVE_PHOTO")
                                message:nil
                               delegate:self
-                     cancelButtonTitle:NSLocalizedString(@"否", @"否")
-                     otherButtonTitles:NSLocalizedString(@"是", @"是"), nil];
+                     cancelButtonTitle:NSLocalizedString(@"BUTTON_TITLE_TURN_BACK_CANCEL", @"BUTTON_TITLE_TURN_BACK_CANCEL")
+                     otherButtonTitles:NSLocalizedString(@"UIBUTTON_TITLE_SAVE_PHTOT_OK", @"UIBUTTON_TITLE_SAVE_PHTOT_OK"), nil];
     alertView.tag = 100;
     [alertView show];
 }
@@ -288,13 +290,15 @@ didFinishSavingWithError:(NSError *)error
     if (!view.hasLoadedImage) {
         return;
     }
+    
     CGPoint touchPoint = [recognizer locationInView:self];
-    if (view.scrollview.zoomScale <= 1.0) {
+    if (view.scrollview.zoomScale < 1.0f) {
+        [view.scrollview setZoomScale:1.0f animated:YES];
+    }else if(view.scrollview.zoomScale == 1.0) {
         CGFloat scaleX = touchPoint.x + view.scrollview.contentOffset.x;
         CGFloat sacleY = touchPoint.y + view.scrollview.contentOffset.y;
         [view.scrollview zoomToRect:CGRectMake(scaleX, sacleY, 10, 10)
                            animated:YES];
-        
     } else {
         [view.scrollview setZoomScale:1.0
                              animated:YES];
@@ -302,9 +306,9 @@ didFinishSavingWithError:(NSError *)error
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
-    FXPhotoBrowserView *currentView = self.scrollView.subviews[self.currentImageIndex];
-    [currentView.scrollview setZoomScale:1.0
-                                animated:YES];
+//    FXPhotoBrowserView *currentView = self.scrollView.subviews[self.currentImageIndex];
+//    [currentView.scrollview setZoomScale:1.0
+//                                animated:YES];
     [self hidePhotoBrowser:recognizer];
 }
 
@@ -313,8 +317,15 @@ didFinishSavingWithError:(NSError *)error
     UIImageView *currentImageView = view.imageview;
     CGRect targetTemp = [self.selectedImageView.superview convertRect:self.selectedImageView.frame
                                                                toView:self];
-
+//    NSLog(@"%@", NSStringFromCGRect([view.scrollview zoomedRectOfUIView:view.imageview]));
+//    NSLog(@"%f", view.scrollview.zoomScale);
+    NSLog(@"%f", view.scrollview.contentOffset.y);
     UIImageView *tempImageView = [[UIImageView alloc] init];
+    
+    //test
+    tempImageView.contentMode = UIViewContentModeScaleAspectFill;
+    tempImageView.clipsToBounds = YES;
+    
     tempImageView.image = currentImageView.image;
     CGFloat tempImageSizeHeight = tempImageView.image.size.height;
     CGFloat tempImageSizeWidth = tempImageView.image.size.width;
@@ -331,7 +342,7 @@ didFinishSavingWithError:(NSError *)error
                            kScreenWidth,
                            tempImageViewHeight);
     }
-    tempImageView.frame = frame;
+    tempImageView.frame = [view.scrollview zoomedRectOfUIView:view.imageview];
     [self addSubview:tempImageView];
     self.scrollView.hidden = YES;
     self.backgroundColor = [UIColor clearColor];
