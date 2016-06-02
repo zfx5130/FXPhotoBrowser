@@ -43,18 +43,10 @@
     [[SDWebImageManager sharedManager].imageCache clearDisk];
     [self.clickImageView sd_setImageWithURL:[NSURL URLWithString:@"http://ww2.sinaimg.cn/thumbnail/642beb18gw1ep3629gfm0g206o050b2a.gif"]
                            placeholderImage:[UIImage imageNamed:@"c1_settings"]];
-    [self.secondImageView sd_setImageWithURL:[NSURL URLWithString:@"http://ww4.sinaimg.cn/thumbnail/677febf5gw1erma1g5xd0j20k0esa7wj.jpg"]
-                            placeholderImage:[UIImage imageNamed:@"c1_settings"]];
-    self.clickImageView.tag = 0;
     UITapGestureRecognizer *tapGesture =
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(tap:)];
-    UITapGestureRecognizer *secondGesture =
-    [[UITapGestureRecognizer alloc] initWithTarget:self
-                                            action:@selector(tap:)];
-    self.secondImageView.tag = 1;
-    [self.secondImageView addGestureRecognizer:tapGesture];
-    [self.clickImageView addGestureRecognizer:secondGesture];
+    [self.clickImageView addGestureRecognizer:tapGesture];
     
 }
 
@@ -62,8 +54,7 @@
 
 - (NSArray *)imageUrls {
     if (!_imageUrls) {
-        _imageUrls = @[@"http://ww2.sinaimg.cn/bmiddle/642beb18gw1ep3629gfm0g206o050b2a.gif",
-                       @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg"
+        _imageUrls = @[@"http://ww2.sinaimg.cn/bmiddle/642beb18gw1ep3629gfm0g206o050b2a.gif"
                        ];
     }
     return _imageUrls;

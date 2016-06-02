@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3A47E3DB84FBB08D4E93A113 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8149018B9E7FF35EFC206BD /* libPods.a */; };
+		D70355211CFFE9C7006F99C1 /* UIScrollView+custom.m in Sources */ = {isa = PBXBuildFile; fileRef = D70355201CFFE9C7006F99C1 /* UIScrollView+custom.m */; };
 		D717CC741C9FF12A00A1CA8E /* FXPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = D717CC6E1C9FF12A00A1CA8E /* FXPhotoBrowser.m */; };
 		D717CC751C9FF12A00A1CA8E /* FXPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = D717CC711C9FF12A00A1CA8E /* FXPhotoBrowserView.m */; };
 		D717CC761C9FF12A00A1CA8E /* FXWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = D717CC731C9FF12A00A1CA8E /* FXWaitingView.m */; };
@@ -44,6 +45,8 @@
 		2C9EC2AD9A6607EAA6C99DFE /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		82D0389D9E41BE4FDF64F908 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A8149018B9E7FF35EFC206BD /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D703551F1CFFE9C7006F99C1 /* UIScrollView+custom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+custom.h"; sourceTree = "<group>"; };
+		D70355201CFFE9C7006F99C1 /* UIScrollView+custom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+custom.m"; sourceTree = "<group>"; };
 		D717CC6D1C9FF12A00A1CA8E /* FXPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowser.h; sourceTree = "<group>"; };
 		D717CC6E1C9FF12A00A1CA8E /* FXPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXPhotoBrowser.m; sourceTree = "<group>"; };
 		D717CC6F1C9FF12A00A1CA8E /* FXPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXPhotoBrowserConfig.h; sourceTree = "<group>"; };
@@ -186,6 +189,8 @@
 		D7EF27AB1C7D8AAA000DA3B4 /* FXPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				D703551F1CFFE9C7006F99C1 /* UIScrollView+custom.h */,
+				D70355201CFFE9C7006F99C1 /* UIScrollView+custom.m */,
 				D717CC6D1C9FF12A00A1CA8E /* FXPhotoBrowser.h */,
 				D717CC6E1C9FF12A00A1CA8E /* FXPhotoBrowser.m */,
 				D717CC6F1C9FF12A00A1CA8E /* FXPhotoBrowserConfig.h */,
@@ -371,6 +376,7 @@
 				D717CC741C9FF12A00A1CA8E /* FXPhotoBrowser.m in Sources */,
 				D7EF277D1C7D8A77000DA3B4 /* AppDelegate.m in Sources */,
 				D7EF277A1C7D8A77000DA3B4 /* main.m in Sources */,
+				D70355211CFFE9C7006F99C1 /* UIScrollView+custom.m in Sources */,
 				D78FDD511C867A3C00F073B9 /* FXDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
